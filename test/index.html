@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>React Playground Savchenko</title>
+    <script src="lib/babel.min.js"></script>
+    <script src="lib/react.js"></script>
+    <script src="lib/react-dom.js"></script>
+    <script type="text/javascript" src="../dist/index.js"></script>
+    <script type="text/babel">
+
+        class MyTimer extends React.Component {
+
+            interval;
+            state = {
+                time: 0
+            };
+
+            constructor (props) {
+                super(props);
+
+            }
+
+            tick () {
+                this.setState({
+                    time: this.state.time + 1
+                });
+            }
+
+            componentDidMount () {
+                this.interval = setInterval(this.tick.bind(this), 1000);
+            }
+
+            componentWillUnmount () {
+                clearInterval(this.interval);
+            }
+
+            render () {
+                return <div>Time elapsed: { this.state.time }</div>
+            }
+
+        }
+
+        class Wrapper extends React.Component {
+
+            state = {
+                data: [
+                    {
+                        id: 1,
+                        header: "Hello!",
+                        body: "This is the body. This is successfully rendered card."
+                    },
+                    {
+                        id: 2,
+                        header: "Hello 2!",
+                        body: "This is the body. This is successfully rendered card. This is successfully rendered card. This is successfully rendered card. This is successfully rendered card. This is successfully rendered card."
+                    },
+                    {
+                        id: 3,
+                        header: "Hello 3!",
+                        body: "This is the body."
+                    },
+                    {
+                        id: 4,
+                        header: "Hello 4. This is a very long title of the card.",
+                        body: "This is the body. This is successfully rendered card. This is successfully rendered card. This is successfully rendered card. This is successfully rendered card. This is the body. This is successfully rendered card. This is successfully rendered card."
+                    },
+                    {
+                        id: 5,
+                        header: "Hello 5!",
+                        body: "This is the body. This is successfully rendered card. This is successfully rendered card. This is successfully rendered card. This is successfully rendered card. This is successfully rendered card."
+                    },
+                ]
+            };
+
+            addCard () {
+                this.setState({
+                    data: this.state.data.concat({
+                        id: this.state.data.length + 1,
+                        header: "This is a dummy card",
+                        body: "This is a dummy body. Dummy body. Dummy body. Dummy body. Dummy body"
+                            + ". Dummy body. Dummy body. Dummy body. Dummy body. Dummy body"
+                            + ". Dummy body. Dummy body. Dummy body. Dummy body. Dummy body"
+                            + ". Dummy body. Dummy body. Dummy body. Dummy body. Dummy body."
+                    })
+                });
+            }
+
+            render () {
+                //                        <Card key="card">
+                //                            <MyTimer/>
+                //                        </Card>
+                return <div>
+                    <XMasonry>
+                        { this.state.data.map((d, i) =>
+                            <Card key={ d.id }>
+                                <h1>{ d.header }</h1>
+                                <p>{ d.body }</p>
+                            </Card>
+                        )}
+                    </XMasonry>
+                    <div>
+                        <button onClick={ this.addCard.bind(this) }>Add Card</button>
+                    </div>
+                </div>
+            }
+        }
+
+        ReactDOM.render(
+            <Wrapper/>,
+            document.getElementById(`root`)
+        );
+
+    </script>
+</head>
+<body>
+    <div id="root"></div>
+</body>
+</html>
