@@ -1,0 +1,11 @@
+# tests
+test
+
+# build tools
+webpack.config.babel.js
+
+# etc
+node_modules
+src
+.babelrc
+.gitignore

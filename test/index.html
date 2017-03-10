@@ -7,39 +7,29 @@
     <script src="lib/react.js"></script>
     <script src="lib/react-dom.js"></script>
     <script type="text/javascript" src="../dist/index.js"></script>
-    <script type="text/babel">
-
-        class MyTimer extends React.Component {
-
-            interval;
-            state = {
-                time: 0
-            };
-
-            constructor (props) {
-                super(props);
-
+    <style type="text/css">
+        @keyframes comeIn {
+            0% {
+                transform: scale(0);
             }
-
-            tick () {
-                this.setState({
-                    time: this.state.time + 1
-                });
+            100% {
+                transform: scale(1);
             }
-
-            componentDidMount () {
-                this.interval = setInterval(this.tick.bind(this), 1000);
-            }
-
-            componentWillUnmount () {
-                clearInterval(this.interval);
-            }
-
-            render () {
-                return <div>Time elapsed: { this.state.time }</div>
-            }
-
         }
+
+        .xmasonry .xblock {
+            animation: comeIn ease 0.5s;
+            animation-iteration-count: 1;
+        }
+
+        .card {
+            margin: 10px;
+            padding: 5px;
+            border-radius: 10px;
+            box-shadow: 0 1px 3px darkgray;
+        }
+    </style>
+    <script type="text/babel">
 
         class Wrapper extends React.Component {
 
@@ -53,7 +43,8 @@
                     {
                         id: 2,
                         header: "Hello 2!",
-                        body: "This is the body. This is successfully rendered card. This is successfully rendered card. This is successfully rendered card. This is successfully rendered card. This is successfully rendered card."
+                        body: "This is the body. This is successfully rendered card. This is successfully rendered card. This is successfully rendered card. This is successfully rendered card. This is successfully rendered card.",
+                        width: 2
                     },
                     {
                         id: 3,
@@ -70,6 +61,38 @@
                         header: "Hello 5!",
                         body: "This is the body. This is successfully rendered card. This is successfully rendered card. This is successfully rendered card. This is successfully rendered card. This is successfully rendered card."
                     },
+                    {
+                        id: 6,
+                        header: "Hello 6...",
+                        body: "Duck the system!"
+                    },
+                    {
+                        id: 7,
+                        header: "Hello 7!",
+                        body: "This block takes 2 blocks of width! This block takes 2 blocks of width! This block takes 2 blocks of width! This block takes 2 blocks of width! This block takes 2 blocks of width!",
+                        width: 2
+                    },
+                    {
+                        id: 8,
+                        header: "Hello 8 :)",
+                        body: "2 blocks of width again! 2 blocks of width again! 2 blocks of width again! 2 blocks of width again! 2 blocks of width again! 2 blocks of width again! 2 blocks of width again!",
+                        width: 2
+                    },
+                    {
+                        id: 9,
+                        header: "Hello 9",
+                        body: "Dummy card"
+                    },
+                    {
+                        id: 10,
+                        header: "Hello 10",
+                        body: "Dummy card"
+                    },
+                    {
+                        id: 11,
+                        header: "Hello 11",
+                        body: "Dummy card"
+                    }
                 ]
             };
 
@@ -78,25 +101,29 @@
                     data: this.state.data.concat({
                         id: this.state.data.length + 1,
                         header: "This is a dummy card",
-                        body: "This is a dummy body. Dummy body. Dummy body. Dummy body. Dummy body"
-                            + ". Dummy body. Dummy body. Dummy body. Dummy body. Dummy body"
-                            + ". Dummy body. Dummy body. Dummy body. Dummy body. Dummy body"
-                            + ". Dummy body. Dummy body. Dummy body. Dummy body. Dummy body."
+                        body: ["This is a dummy body. Dummy body. Dummy body. Dummy body. Dummy body"
+                            , ". Dummy body. Dummy body. Dummy body. Dummy body. Dummy body"
+                            , ". Dummy body. Dummy body. Dummy body. Dummy body. Dummy body"
+                            , ". Dummy body. Dummy body. Dummy body. Dummy body. Dummy body."
+                            , ". Dummy body. Dummy body. Dummy body. Dummy body. Dummy body."
+                            , ". Dummy body. Dummy body. Dummy body. Dummy body. Dummy body."
+                        ].slice(0, Math.floor(Math.random() * 6) + 1),
+                        width: Math.floor(1 + Math.random() * 2)
                     })
                 });
             }
 
             render () {
-                //                        <Card key="card">
-                //                            <MyTimer/>
-                //                        </Card>
+                setTimeout(() => { document.body.scrollTop = 999999 }, 50);
                 return <div>
                     <XMasonry>
                         { this.state.data.map((d, i) =>
-                            <Card key={ d.id }>
-                                <h1>{ d.header }</h1>
-                                <p>{ d.body }</p>
-                            </Card>
+                            <XBlock key={ d.id } width={ d.width || 1 }>
+                                <div className="card">
+                                    <h1>{ d.header }</h1>
+                                    <p>{ d.body }</p>
+                                </div>
+                            </XBlock>
                         )}
                     </XMasonry>
                     <div>
