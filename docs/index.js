@@ -170,7 +170,9 @@ var XMasonry = function (_React$Component) {
     _inherits(XMasonry, _React$Component);
 
     /**
-     * @type {HTMLElement}
+     * The width of XMasonry block in pixels. Is assigned dynamically, must be in stick with the
+     * state property.
+     * @type {number}
      */
     function XMasonry(props) {
         _classCallCheck(this, XMasonry);
@@ -180,11 +182,15 @@ var XMasonry = function (_React$Component) {
         _this.state = {
             blocks: {},
             height: 0,
-            columns: 3
+            columns: 3,
+            containerWidth: 0
         };
         _this.container = null;
         _this.mounted = false;
         _this.resizeListener = null;
+        _this.debouncedResizeTimeout = null;
+        _this.debounceRate = 50;
+        _this.containerWidth = 0;
 
         if (_this.props.responsive) window.addEventListener("resize", _this.resizeListener = _this.onResize.bind(_this));
         _this.onResize();
@@ -192,16 +198,25 @@ var XMasonry = function (_React$Component) {
     }
 
     /**
-     * The width of XMasonry block in pixels. Is assigned dynamically.
-     * @type {number}
+     * @type {HTMLElement}
      */
 
 
     _createClass(XMasonry, [{
+        key: "updateContainerWidth",
+        value: function updateContainerWidth() {
+            var newWidth = this.container.getBoundingClientRect().width;
+            if (newWidth === this.containerWidth) return;
+            this.setState({
+                containerWidth: this.containerWidth = newWidth,
+                blocks: {}
+            });
+        }
+    }, {
         key: "componentDidMount",
         value: function componentDidMount() {
             this.mounted = true;
-            this.containerWidth = this.container.getBoundingClientRect().width;
+            this.updateContainerWidth();
             this.measureChildren();
         }
     }, {
@@ -213,6 +228,7 @@ var XMasonry = function (_React$Component) {
     }, {
         key: "componentDidUpdate",
         value: function componentDidUpdate() {
+            this.updateContainerWidth();
             this.measureChildren();
         }
     }, {
@@ -264,18 +280,34 @@ var XMasonry = function (_React$Component) {
 
     }, {
         key: "onResize",
-        value: function onResize() {}
+        value: function onResize() {
+            var _this2 = this;
+
+            if (!this.mounted) return;
+            if (this.debouncedResizeTimeout) {
+                clearTimeout(this.debouncedResizeTimeout);
+                this.debouncedResizeTimeout = setTimeout(function () {
+                    _this2.debouncedResizeTimeout = null;
+                    _this2.updateContainerWidth(_this2);
+                }, this.debounceRate);
+                return;
+            }
+            this.updateContainerWidth();
+            this.debouncedResizeTimeout = setTimeout(function () {
+                return _this2.debouncedResizeTimeout = null;
+            }, this.debounceRate);
+        }
     }, {
         key: "render",
         value: function render() {
-            var _this2 = this;
+            var _this3 = this;
 
             var cardWidth = Math.floor(10000 / this.state.columns) / 100;
 
             var _React$Children$toArr = _react2.default.Children.toArray(this.props.children).reduce(function (acc, element) {
-                var measured = _this2.state.blocks[element.key],
+                var measured = _this3.state.blocks[element.key],
                     // || undefined
-                width = Math.min(element.props.width, _this2.state.columns);
+                width = Math.min(element.props.width, _this3.state.columns);
                 acc[measured ? 0 : 1].push(measured ? _react2.default.cloneElement(element, {
                     "data-key": element.key,
                     "data-width": width,
@@ -305,7 +337,7 @@ var XMasonry = function (_React$Component) {
                 { className: "xmasonry", style: _extends({}, XMasonry.containerStyle, {
                         height: this.state.height
                     }), ref: function ref(c) {
-                        return _this2.container = c;
+                        return _this3.container = c;
                     } },
                 measuredElements,
                 elementsToMeasure
@@ -485,7 +517,7 @@ var Wrapper = function (_React$Component) {
                 _react2.default.createElement(
                     "h3",
                     { style: { textAlign: "center" } },
-                    "XMasonry Layout Demo"
+                    "React-XMasonry Layout Demo"
                 ),
                 _react2.default.createElement(
                     _index.XMasonry,

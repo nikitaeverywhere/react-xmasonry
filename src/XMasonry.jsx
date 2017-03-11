@@ -9,7 +9,8 @@ export default class XMasonry extends React.Component {
     state = {
         blocks: {},
         height: 0,
-        columns: 3
+        columns: 3,
+        containerWidth: 0
     };
 
     /**
@@ -19,12 +20,15 @@ export default class XMasonry extends React.Component {
 
     mounted = false;
     resizeListener = null;
+    debouncedResizeTimeout = null;
+    debounceRate = 50;
 
     /**
-     * The width of XMasonry block in pixels. Is assigned dynamically.
+     * The width of XMasonry block in pixels. Is assigned dynamically, must be in stick with the
+     * state property.
      * @type {number}
      */
-    containerWidth;
+    containerWidth = 0;
 
     static containerStyle = {
         position: `relative`
@@ -50,9 +54,19 @@ export default class XMasonry extends React.Component {
         return { col: minIndex, height: minHeight };
     }
 
+    updateContainerWidth () {
+        let newWidth = this.container.getBoundingClientRect().width;
+        if (newWidth === this.containerWidth)
+            return;
+        this.setState({
+            containerWidth: this.containerWidth = newWidth,
+            blocks: {}
+        });
+    }
+
     componentDidMount() {
         this.mounted = true;
-        this.containerWidth = this.container.getBoundingClientRect().width;
+        this.updateContainerWidth();
         this.measureChildren();
     }
 
@@ -62,6 +76,7 @@ export default class XMasonry extends React.Component {
     }
 
     componentDidUpdate() {
+        this.updateContainerWidth();
         this.measureChildren();
     }
 
@@ -101,7 +116,19 @@ export default class XMasonry extends React.Component {
      * happens.
      */
     onResize () {
-
+        if (!this.mounted)
+            return;
+        if (this.debouncedResizeTimeout) {
+            clearTimeout(this.debouncedResizeTimeout);
+            this.debouncedResizeTimeout = setTimeout(() => {
+                this.debouncedResizeTimeout = null;
+                this.updateContainerWidth(this);
+            }, this.debounceRate);
+            return;
+        }
+        this.updateContainerWidth();
+        this.debouncedResizeTimeout =
+            setTimeout(() => this.debouncedResizeTimeout = null, this.debounceRate);
     }
 
     render () {

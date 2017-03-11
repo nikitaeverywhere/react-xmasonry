@@ -87,7 +87,7 @@ class Wrapper extends React.Component {
     render () {
         setTimeout(() => { document.body.scrollTop = 999999 }, 50);
         return <div>
-            <h3 style={{ textAlign: "center" }}>XMasonry Layout Demo</h3>
+            <h3 style={{ textAlign: "center" }}>React-XMasonry Layout Demo</h3>
             <XMasonry>
                 { this.state.data.map((d, i) =>
                     <XBlock key={ d.id } width={ d.width || 1 }>
