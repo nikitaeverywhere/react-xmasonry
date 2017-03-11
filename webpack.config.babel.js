@@ -1,7 +1,11 @@
 export default {
-    entry: `./src/index.jsx`,
+    entry: {
+        "./dist/index": "./src/index.jsx",
+        "./docs/index": "./docs/index.jsx"
+    },
     output: {
-        filename: `dist/index.js`
+        path: "./",
+        filename: "[name].js"
     },
     externals: {
         "react": "React"

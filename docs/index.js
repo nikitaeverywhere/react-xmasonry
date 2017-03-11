@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 4);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -348,6 +348,166 @@ if (typeof window !== "undefined") {
     window.XMasonry = _XMasonry2.default;
     window.XBlock = _XBlock2.default;
 }
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _index = __webpack_require__(3);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } //import "babel-polyfill";
+
+
+var Wrapper = function (_React$Component) {
+    _inherits(Wrapper, _React$Component);
+
+    function Wrapper() {
+        var _ref;
+
+        var _temp, _this, _ret;
+
+        _classCallCheck(this, Wrapper);
+
+        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+        }
+
+        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Wrapper.__proto__ || Object.getPrototypeOf(Wrapper)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+            data: [{
+                id: 1,
+                header: "Hello!",
+                body: "This is the body. This is successfully rendered card."
+            }, {
+                id: 2,
+                header: "Hello 2!",
+                body: "This is the body. This is successfully rendered card. This is successfully rendered card. This is successfully rendered card. This is successfully rendered card. This is successfully rendered card.",
+                width: 2
+            }, {
+                id: 3,
+                header: "Hello 3!",
+                body: "This is the body."
+            }, {
+                id: 4,
+                header: "Hello 4. This is a very long title of the card.",
+                body: "This is the body. This is successfully rendered card. This is successfully rendered card. This is successfully rendered card. This is successfully rendered card. This is the body. This is successfully rendered card. This is successfully rendered card."
+            }, {
+                id: 5,
+                header: "Hello 5!",
+                body: "This is the body. This is successfully rendered card. This is successfully rendered card. This is successfully rendered card. This is successfully rendered card. This is successfully rendered card."
+            }, {
+                id: 6,
+                header: "Hello 6...",
+                body: "Duck the system!"
+            }, {
+                id: 7,
+                header: "Hello 7!",
+                body: "This block takes 2 blocks of width! This block takes 2 blocks of width! This block takes 2 blocks of width! This block takes 2 blocks of width! This block takes 2 blocks of width!",
+                width: 2
+            }, {
+                id: 8,
+                header: "Hello 8 :)",
+                body: "2 blocks of width again! 2 blocks of width again! 2 blocks of width again! 2 blocks of width again! 2 blocks of width again! 2 blocks of width again! 2 blocks of width again!",
+                width: 2
+            }, {
+                id: 9,
+                header: "Hello 9",
+                body: "Dummy card"
+            }, {
+                id: 10,
+                header: "Hello 10",
+                body: "Dummy card"
+            }, {
+                id: 11,
+                header: "Hello 11",
+                body: "Dummy card"
+            }]
+        }, _temp), _possibleConstructorReturn(_this, _ret);
+    }
+
+    _createClass(Wrapper, [{
+        key: "addCard",
+        value: function addCard() {
+            this.setState({
+                data: this.state.data.concat({
+                    id: this.state.data.length + 1,
+                    header: "This is a dummy card",
+                    body: ["This is a dummy body. Dummy body. Dummy body. Dummy body. Dummy body", ". Dummy body. Dummy body. Dummy body. Dummy body. Dummy body", ". Dummy body. Dummy body. Dummy body. Dummy body. Dummy body", ". Dummy body. Dummy body. Dummy body. Dummy body. Dummy body.", ". Dummy body. Dummy body. Dummy body. Dummy body. Dummy body.", ". Dummy body. Dummy body. Dummy body. Dummy body. Dummy body."].slice(0, Math.floor(Math.random() * 6) + 1),
+                    width: Math.floor(1 + Math.random() * 2)
+                })
+            });
+        }
+    }, {
+        key: "render",
+        value: function render() {
+            setTimeout(function () {
+                document.body.scrollTop = 999999;
+            }, 50);
+            return _react2.default.createElement(
+                "div",
+                null,
+                _react2.default.createElement(
+                    "h3",
+                    { style: { textAlign: "center" } },
+                    "XMasonry Layout Demo"
+                ),
+                _react2.default.createElement(
+                    _index.XMasonry,
+                    null,
+                    this.state.data.map(function (d, i) {
+                        return _react2.default.createElement(
+                            _index.XBlock,
+                            { key: d.id, width: d.width || 1 },
+                            _react2.default.createElement(
+                                "div",
+                                { className: "card" },
+                                _react2.default.createElement(
+                                    "h1",
+                                    null,
+                                    d.header
+                                ),
+                                _react2.default.createElement(
+                                    "p",
+                                    null,
+                                    d.body
+                                )
+                            )
+                        );
+                    })
+                ),
+                _react2.default.createElement(
+                    "div",
+                    null,
+                    _react2.default.createElement(
+                        "button",
+                        { onClick: this.addCard.bind(this) },
+                        "Add Card"
+                    )
+                )
+            );
+        }
+    }]);
+
+    return Wrapper;
+}(_react2.default.Component);
+
+window.init = function () {
+    ReactDOM.render(_react2.default.createElement(Wrapper, null), document.getElementById("root"));
+};
 
 /***/ })
 /******/ ]);

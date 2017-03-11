@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>React Playground Savchenko</title>
+    <!--script src="lib/babel.min.js"></script>
+    <script src="lib/react.js"></script>
+    <script type="text/javascript" src="../dist/index.js"></script>
+    <script src="lib/react-dom.js"></script-->
+    <script src="lib/react.js"></script>
+    <script src="lib/react-dom.js"></script>
+    <script src="index.js"></script>
+    <style type="text/css">
+        @keyframes comeIn {
+            0% { transform: scale(0) }
+            75% { transform: scale(1.03) }
+            100% { transform: scale(1) }
+        }
+
+        .xmasonry .xblock {
+            animation: comeIn ease 0.5s;
+            animation-iteration-count: 1;
+        }
+
+        .card {
+            margin: 10px;
+            padding: 5px;
+            border-radius: 10px;
+            box-shadow: 0 1px 3px darkgray;
+        }
+    </style>
+</head>
+<body onload="window.init();">
+    <div id="root"></div>
+</body>
+</html>

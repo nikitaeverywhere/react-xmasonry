@@ -31,20 +31,13 @@ export default class XMasonry extends React.Component {
     static getBestFitColumn (heights, width = 1) {
         let minIndex = 0,
             minHeight = Infinity;
-        console.log(heights.slice(), width);
         for (let i = 0; i < heights.length - width + 1; ++i) {
             let currentMinHeight = Math.max.apply(null, heights.slice(i, i + width));
-            // for (let j = i; j < i + width - 1; ++j) {
-            //     if (heights[j] > currentMinHeight) {
-            //         currentMinHeight = heights[j];
-            //     }
-            // }
             if (currentMinHeight < minHeight) {
                 minHeight = currentMinHeight;
                 minIndex = i;
             }
         }
-        console.log(minIndex, minHeight);
         return { col: minIndex, height: minHeight };
     }
 
@@ -59,10 +52,11 @@ export default class XMasonry extends React.Component {
 
     measureChildren () {
         let blocks = {};
-        for (let c of this.container.children) {
-            if (!c.dataset.hasOwnProperty("xkey")) continue;
-            let { height } = c.getBoundingClientRect();
-            blocks[c.dataset["xkey"]] = { height: Math.ceil(height) };
+        for (let i = 0; i < this.container.children.length; i++) {
+            let child = this.container.children[i];
+            if (!child.dataset.hasOwnProperty("xkey")) continue;
+            let { height } = child.getBoundingClientRect();
+            blocks[child.dataset["xkey"].toString()] = { height: Math.ceil(height) };
         }
         if (Object.keys(blocks).length > 0) this.recalculatePositions(blocks);
     }
@@ -73,13 +67,15 @@ export default class XMasonry extends React.Component {
                 ...newBlocks
             },
             heights = Array.from({ length: this.columns }, () => 0);
-        for (let c of this.container.children) {
-            if (!blocks.hasOwnProperty(c.dataset.key)) continue;
-            let blockWidth = +c.dataset.width || 1,
+        for (let i = 0; i < this.container.children.length; i++) {
+            let child = this.container.children[i];
+            if (!blocks.hasOwnProperty(child.dataset.key)) continue;
+            let blockWidth = +child.dataset.width || 1,
                 { col, height } = XMasonry.getBestFitColumn(heights, blockWidth),
-                newHeight = height + blocks[c.dataset.key].height;
-            blocks[c.dataset.key].left = `${ col * Math.floor(10000 / this.columns) / 100 }%`;
-            blocks[c.dataset.key].top = `${ height }px`;
+                newHeight = height + blocks[child.dataset.key].height;
+            blocks[child.dataset.key.toString()].left =
+                `${ col * Math.floor(10000 / this.columns) / 100 }%`;
+            blocks[child.dataset.key.toString()].top = `${ height }px`;
             for (let i = 0; i < blockWidth; ++i) heights[col + i] = newHeight;
         }
         this.setState({ blocks, height: Math.max.apply(null, heights) });
