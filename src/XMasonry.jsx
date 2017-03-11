@@ -2,15 +2,14 @@ import React from "react";
 
 export default class XMasonry extends React.Component {
 
-    /**
-     * Number of displayed columns.
-     * @type {number}
-     */
-    columns = 3;
+    static defaultProps = {
+        responsive: true
+    };
 
     state = {
         blocks: {},
-        height: 0
+        height: 0,
+        columns: 3
     };
 
     /**
@@ -18,8 +17,11 @@ export default class XMasonry extends React.Component {
      */
     container = null;
 
+    mounted = false;
+    resizeListener = null;
+
     /**
-     * The width of the container in pixels. Is assigned dynamically.
+     * The width of XMasonry block in pixels. Is assigned dynamically.
      * @type {number}
      */
     containerWidth;
@@ -27,6 +29,13 @@ export default class XMasonry extends React.Component {
     static containerStyle = {
         position: `relative`
     };
+
+    constructor (props) {
+        super(props);
+        if (this.props.responsive)
+            window.addEventListener("resize", this.resizeListener = this.onResize.bind(this));
+        this.onResize();
+    }
 
     static getBestFitColumn (heights, width = 1) {
         let minIndex = 0,
@@ -42,8 +51,14 @@ export default class XMasonry extends React.Component {
     }
 
     componentDidMount() {
+        this.mounted = true;
         this.containerWidth = this.container.getBoundingClientRect().width;
         this.measureChildren();
+    }
+
+    componentWillUnmount () {
+        this.mounted = false;
+        if (this.resizeListener) window.removeEventListener("resize", this.resizeListener);
     }
 
     componentDidUpdate() {
@@ -66,45 +81,56 @@ export default class XMasonry extends React.Component {
                 ...this.state.blocks,
                 ...newBlocks
             },
-            heights = Array.from({ length: this.columns }, () => 0);
+            heights = Array.from({ length: this.state.columns }, () => 0);
         for (let i = 0; i < this.container.children.length; i++) {
             let child = this.container.children[i];
             if (!blocks.hasOwnProperty(child.dataset.key)) continue;
             let blockWidth = +child.dataset.width || 1,
                 { col, height } = XMasonry.getBestFitColumn(heights, blockWidth),
                 newHeight = height + blocks[child.dataset.key].height;
-            blocks[child.dataset.key.toString()].left =
-                `${ col * Math.floor(10000 / this.columns) / 100 }%`;
-            blocks[child.dataset.key.toString()].top = `${ height }px`;
+            blocks[child.dataset.key].left =
+                `${ col * Math.floor(10000 / this.state.columns) / 100 }%`;
+            blocks[child.dataset.key].top = `${ height }px`;
             for (let i = 0; i < blockWidth; ++i) heights[col + i] = newHeight;
         }
         this.setState({ blocks, height: Math.max.apply(null, heights) });
     }
 
+    /**
+     * This method is triggered when component gets created (before the mount) and when resize
+     * happens.
+     */
+    onResize () {
+
+    }
+
     render () {
-        const cardWidth = Math.floor(10000 / this.columns) / 100;
+        const cardWidth = Math.floor(10000 / this.state.columns) / 100;
         const [measuredElements, elementsToMeasure]
             = React.Children.toArray(this.props.children).reduce((acc, element) => {
-            let measured = this.state.blocks[element.key]; // || undefined
+            let measured = this.state.blocks[element.key], // || undefined
+                width = Math.min(element.props.width, this.state.columns);
             acc[measured ? 0 : 1].push(
                 measured
                     ? React.cloneElement(element, {
                         "data-key": element.key,
-                        "data-width": element.props.width,
+                        "data-width": width,
                         "style": {
                             width: `${ cardWidth * element.props.width }%`,
                             ...measured
                         },
-                        "measured": true
+                        "measured": true,
+                        "width": width
                     })
                     : React.cloneElement(element, {
                         "data-key": element.key,
-                        "data-width": element.props.width,
+                        "data-width": width,
                         "data-xkey": element.key,
                         "style": {
                             width: `${ cardWidth * element.props.width }%`,
                             visibility: "hidden"
-                        }
+                        },
+                        "width": width
                     })
             );
             return acc;

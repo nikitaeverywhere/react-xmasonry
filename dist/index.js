@@ -111,9 +111,14 @@ var XBlock = function (_React$Component) {
     _createClass(XBlock, [{
         key: "render",
         value: function render() {
+            var dataAttributes = {
+                "data-key": this.props["data-key"],
+                "data-width": this.props["data-width"]
+            };
+            if (this.props["data-xkey"]) dataAttributes["data-xkey"] = this.props["data-xkey"];
             return _react2.default.createElement(
                 "div",
-                _extends({}, this.props, { style: _extends({}, this.props.style, XBlock.defaultStyle),
+                _extends({}, dataAttributes, { style: _extends({}, this.props.style, XBlock.defaultStyle),
                     className: this.props.measured ? "xblock" : "" }),
                 this.props.children
             );
@@ -164,36 +169,30 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var XMasonry = function (_React$Component) {
     _inherits(XMasonry, _React$Component);
 
-    function XMasonry() {
-        var _ref;
-
-        var _temp, _this, _ret;
-
-        _classCallCheck(this, XMasonry);
-
-        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-            args[_key] = arguments[_key];
-        }
-
-        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = XMasonry.__proto__ || Object.getPrototypeOf(XMasonry)).call.apply(_ref, [this].concat(args))), _this), _this.columns = 3, _this.state = {
-            blocks: {},
-            height: 0
-        }, _this.container = null, _temp), _possibleConstructorReturn(_this, _ret);
-    }
-
-    /**
-     * Number of displayed columns.
-     * @type {number}
-     */
-
-
     /**
      * @type {HTMLElement}
      */
+    function XMasonry(props) {
+        _classCallCheck(this, XMasonry);
 
+        var _this = _possibleConstructorReturn(this, (XMasonry.__proto__ || Object.getPrototypeOf(XMasonry)).call(this, props));
+
+        _this.state = {
+            blocks: {},
+            height: 0,
+            columns: 3
+        };
+        _this.container = null;
+        _this.mounted = false;
+        _this.resizeListener = null;
+
+        if (_this.props.responsive) window.addEventListener("resize", _this.resizeListener = _this.onResize.bind(_this));
+        _this.onResize();
+        return _this;
+    }
 
     /**
-     * The width of the container in pixels. Is assigned dynamically.
+     * The width of XMasonry block in pixels. Is assigned dynamically.
      * @type {number}
      */
 
@@ -201,8 +200,15 @@ var XMasonry = function (_React$Component) {
     _createClass(XMasonry, [{
         key: "componentDidMount",
         value: function componentDidMount() {
+            this.mounted = true;
             this.containerWidth = this.container.getBoundingClientRect().width;
             this.measureChildren();
+        }
+    }, {
+        key: "componentWillUnmount",
+        value: function componentWillUnmount() {
+            this.mounted = false;
+            if (this.resizeListener) window.removeEventListener("resize", this.resizeListener);
         }
     }, {
         key: "componentDidUpdate",
@@ -230,7 +236,7 @@ var XMasonry = function (_React$Component) {
             var newBlocks = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
 
             var blocks = _extends({}, this.state.blocks, newBlocks),
-                heights = Array.from({ length: this.columns }, function () {
+                heights = Array.from({ length: this.state.columns }, function () {
                 return 0;
             });
             for (var i = 0; i < this.container.children.length; i++) {
@@ -242,38 +248,51 @@ var XMasonry = function (_React$Component) {
                     height = _XMasonry$getBestFitC.height,
                     newHeight = height + blocks[child.dataset.key].height;
 
-                blocks[child.dataset.key.toString()].left = col * Math.floor(10000 / this.columns) / 100 + "%";
-                blocks[child.dataset.key.toString()].top = height + "px";
+                blocks[child.dataset.key].left = col * Math.floor(10000 / this.state.columns) / 100 + "%";
+                blocks[child.dataset.key].top = height + "px";
                 for (var _i = 0; _i < blockWidth; ++_i) {
                     heights[col + _i] = newHeight;
                 }
             }
             this.setState({ blocks: blocks, height: Math.max.apply(null, heights) });
         }
+
+        /**
+         * This method is triggered when component gets created (before the mount) and when resize
+         * happens.
+         */
+
+    }, {
+        key: "onResize",
+        value: function onResize() {}
     }, {
         key: "render",
         value: function render() {
             var _this2 = this;
 
-            var cardWidth = Math.floor(10000 / this.columns) / 100;
+            var cardWidth = Math.floor(10000 / this.state.columns) / 100;
 
             var _React$Children$toArr = _react2.default.Children.toArray(this.props.children).reduce(function (acc, element) {
-                var measured = _this2.state.blocks[element.key]; // || undefined
+                var measured = _this2.state.blocks[element.key],
+                    // || undefined
+                width = Math.min(element.props.width, _this2.state.columns);
                 acc[measured ? 0 : 1].push(measured ? _react2.default.cloneElement(element, {
                     "data-key": element.key,
-                    "data-width": element.props.width,
+                    "data-width": width,
                     "style": _extends({
                         width: cardWidth * element.props.width + "%"
                     }, measured),
-                    "measured": true
+                    "measured": true,
+                    "width": width
                 }) : _react2.default.cloneElement(element, {
                     "data-key": element.key,
-                    "data-width": element.props.width,
+                    "data-width": width,
                     "data-xkey": element.key,
                     "style": {
                         width: cardWidth * element.props.width + "%",
                         visibility: "hidden"
-                    }
+                    },
+                    "width": width
                 }));
                 return acc;
             }, [[], []]),
@@ -313,6 +332,9 @@ var XMasonry = function (_React$Component) {
     return XMasonry;
 }(_react2.default.Component);
 
+XMasonry.defaultProps = {
+    responsive: true
+};
 XMasonry.containerStyle = {
     position: "relative"
 };
