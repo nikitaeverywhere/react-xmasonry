@@ -1,5 +1,8 @@
 # react-xmasonry
 
+[![Dependencies][dep-image]][dep-url]
+[![License][license-image]][license-url]
+
 Simple, minimalistic and featured native masonry layout for React JS.
 
 <h4>General Features</h4>
@@ -79,3 +82,8 @@ Preview
 ![Screenshot](https://cloud.githubusercontent.com/assets/4989256/23816799/6926b8c2-05f7-11e7-8766-bc3c7d10047c.png)
 
 Too see the preview in action, open [the demo page](https://zitros.github.io/react-xmasonry).
+
+[license-image]: https://img.shields.io/github/license/mashape/apistatus.svg
+[license-url]: LICENSE
+[dep-image]: https://img.shields.io/badge/dependencies-none-brightgreen.svg
+[dep-url]: http://npm.anvaka.com/#/view/2d/react-xmasonry
