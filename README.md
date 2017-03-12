@@ -23,7 +23,7 @@ npm install react-xmasonry --save
 Example of Usage
 ----------------
 
-Import XMasonry and XBlock components:
+Import `XMasonry` and `XBlock` components:
 
 ```js
 import { XMasonry, XBlock } from "react-xmasonry";
