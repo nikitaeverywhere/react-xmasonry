@@ -13,8 +13,21 @@ Simple, minimalistic and featured native masonry layout for React JS.
 
 Visit [the demo page](https://zitros.github.io/react-xmasonry) for more details.
 
+Installation
+------------
+
+```bash
+npm install react-xmasonry --save
+```
+
 Example of Usage
 ----------------
+
+Import XMasonry and XBlock components:
+
+```js
+import { XMasonry, XBlock } from "react-xmasonry";
+```
 
 The simplest layout using JSX and a little styling looks as following:
 
@@ -57,6 +70,8 @@ transitions you like (`.xmasonry` and `.xblock` selectors), for example:
     box-shadow: 0 1px 3px darkgray;
 }
 ```
+
+See the [example page sources](https://github.com/ZitRos/react-xmasonry/blob/master/docs/index.jsx).
 
 Preview
 -------
