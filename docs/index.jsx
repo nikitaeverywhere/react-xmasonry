@@ -79,13 +79,13 @@ class Wrapper extends React.Component {
                     , ". Dummy body. Dummy body. Dummy body. Dummy body. Dummy body."
                     , ". Dummy body. Dummy body. Dummy body. Dummy body. Dummy body."
                 ].slice(0, Math.floor(Math.random() * 6) + 1),
-                width: Math.floor(1 + Math.random() * 2)
+                width: Math.floor(1 + Math.random() * 1.5)
             })
         });
+        setTimeout(() => { document.body.scrollTop = 999999 }, 50);
     }
 
     render () {
-        setTimeout(() => { document.body.scrollTop = 999999 }, 50);
         return <div>
             <h3 style={{ textAlign: "center" }}>React-XMasonry Layout Demo</h3>
             <XMasonry>

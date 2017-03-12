@@ -174,6 +174,12 @@ var XMasonry = function (_React$Component) {
      * state property.
      * @type {number}
      */
+
+
+    /**
+     * XMasonry layout container.
+     * @type {HTMLElement}
+     */
     function XMasonry(props) {
         _classCallCheck(this, XMasonry);
 
@@ -181,15 +187,16 @@ var XMasonry = function (_React$Component) {
 
         _this.state = {
             blocks: {},
-            height: 0,
+            containerHeight: 0,
             columns: 3,
             containerWidth: 0
         };
         _this.container = null;
         _this.mounted = false;
         _this.resizeListener = null;
-        _this.debouncedResizeTimeout = null;
+        _this.debouncedResizeTimeout = 0;
         _this.debounceRate = 50;
+        _this.fixedHeight = 0;
         _this.containerWidth = 0;
 
         if (_this.props.responsive) window.addEventListener("resize", _this.resizeListener = _this.onResize.bind(_this));
@@ -198,7 +205,19 @@ var XMasonry = function (_React$Component) {
     }
 
     /**
-     * @type {HTMLElement}
+     * This property assigns the fixed height to XMasonry container. The purpose of this is to
+     * prevent masonry layout from updating infinitely. For example, when the elements get measured
+     * and placed first time, the scroll bar may appear. Because of the width change XMasonry will
+     * go to recalculate sizes once more, appearing at the state 0 again because elements to
+     * calculate get detached from the DOM. This creates an infinite loop. The solution for this is
+     * to fix the container's previously calculated height until all the elements will be measured.
+     * @type {number}
+     */
+
+
+    /**
+     * De-bouncing properties used to prevent size recalculations being called very often.
+     * @type {number}
      */
 
 
@@ -206,10 +225,12 @@ var XMasonry = function (_React$Component) {
         key: "updateContainerWidth",
         value: function updateContainerWidth() {
             var newWidth = this.container.getBoundingClientRect().width;
+            console.log(newWidth, this.containerWidth);
             if (newWidth === this.containerWidth) return;
             this.setState({
                 containerWidth: this.containerWidth = newWidth,
-                blocks: {}
+                blocks: {} // the problem is that when layout is gone to recalculate again,
+                // it need to consider that no scroll bars changes the width.
             });
         }
     }, {
@@ -242,7 +263,7 @@ var XMasonry = function (_React$Component) {
                 var _child$getBoundingCli = child.getBoundingClientRect(),
                     height = _child$getBoundingCli.height;
 
-                blocks[child.dataset["xkey"].toString()] = { height: Math.ceil(height) };
+                blocks[child.dataset["xkey"]] = { height: Math.ceil(height) };
             }
             if (Object.keys(blocks).length > 0) this.recalculatePositions(blocks);
         }
@@ -270,12 +291,13 @@ var XMasonry = function (_React$Component) {
                     heights[col + _i] = newHeight;
                 }
             }
-            this.setState({ blocks: blocks, height: Math.max.apply(null, heights) });
+            this.setState({ blocks: blocks, containerHeight: Math.max.apply(null, heights) });
         }
 
         /**
          * This method is triggered when component gets created (before the mount) and when resize
-         * happens.
+         * happens. This method uses de-bouncing technique to prevent updates from being called very
+         * often.
          */
 
     }, {
@@ -294,7 +316,7 @@ var XMasonry = function (_React$Component) {
             }
             this.updateContainerWidth();
             this.debouncedResizeTimeout = setTimeout(function () {
-                return _this2.debouncedResizeTimeout = null;
+                return _this2.debouncedResizeTimeout = 0;
             }, this.debounceRate);
         }
     }, {
@@ -332,10 +354,11 @@ var XMasonry = function (_React$Component) {
                 measuredElements = _React$Children$toArr2[0],
                 elementsToMeasure = _React$Children$toArr2[1];
 
+            var actualHeight = elementsToMeasure.length ? this.fixedHeight : this.fixedHeight = this.state.containerHeight;
             return _react2.default.createElement(
                 "div",
                 { className: "xmasonry", style: _extends({}, XMasonry.containerStyle, {
-                        height: this.state.height
+                        height: actualHeight
                     }), ref: function ref(c) {
                         return _this3.container = c;
                     } },

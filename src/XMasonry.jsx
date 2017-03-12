@@ -8,20 +8,37 @@ export default class XMasonry extends React.Component {
 
     state = {
         blocks: {},
-        height: 0,
+        containerHeight: 0,
         columns: 3,
         containerWidth: 0
     };
 
     /**
+     * XMasonry layout container.
      * @type {HTMLElement}
      */
     container = null;
 
     mounted = false;
     resizeListener = null;
-    debouncedResizeTimeout = null;
+
+    /**
+     * De-bouncing properties used to prevent size recalculations being called very often.
+     * @type {number}
+     */
+    debouncedResizeTimeout = 0;
     debounceRate = 50;
+
+    /**
+     * This property assigns the fixed height to XMasonry container. The purpose of this is to
+     * prevent masonry layout from updating infinitely. For example, when the elements get measured
+     * and placed first time, the scroll bar may appear. Because of the width change XMasonry will
+     * go to recalculate sizes once more, appearing at the state 0 again because elements to
+     * calculate get detached from the DOM. This creates an infinite loop. The solution for this is
+     * to fix the container's previously calculated height until all the elements will be measured.
+     * @type {number}
+     */
+    fixedHeight = 0;
 
     /**
      * The width of XMasonry block in pixels. Is assigned dynamically, must be in stick with the
@@ -56,11 +73,13 @@ export default class XMasonry extends React.Component {
 
     updateContainerWidth () {
         let newWidth = this.container.getBoundingClientRect().width;
+        console.log(newWidth, this.containerWidth);
         if (newWidth === this.containerWidth)
             return;
         this.setState({
             containerWidth: this.containerWidth = newWidth,
-            blocks: {}
+            blocks: {} // the problem is that when layout is gone to recalculate again,
+                       // it need to consider that no scroll bars changes the width.
         });
     }
 
@@ -86,7 +105,7 @@ export default class XMasonry extends React.Component {
             let child = this.container.children[i];
             if (!child.dataset.hasOwnProperty("xkey")) continue;
             let { height } = child.getBoundingClientRect();
-            blocks[child.dataset["xkey"].toString()] = { height: Math.ceil(height) };
+            blocks[child.dataset["xkey"]] = { height: Math.ceil(height) };
         }
         if (Object.keys(blocks).length > 0) this.recalculatePositions(blocks);
     }
@@ -108,12 +127,13 @@ export default class XMasonry extends React.Component {
             blocks[child.dataset.key].top = `${ height }px`;
             for (let i = 0; i < blockWidth; ++i) heights[col + i] = newHeight;
         }
-        this.setState({ blocks, height: Math.max.apply(null, heights) });
+        this.setState({ blocks, containerHeight: Math.max.apply(null, heights) });
     }
 
     /**
      * This method is triggered when component gets created (before the mount) and when resize
-     * happens.
+     * happens. This method uses de-bouncing technique to prevent updates from being called very
+     * often.
      */
     onResize () {
         if (!this.mounted)
@@ -128,7 +148,7 @@ export default class XMasonry extends React.Component {
         }
         this.updateContainerWidth();
         this.debouncedResizeTimeout =
-            setTimeout(() => this.debouncedResizeTimeout = null, this.debounceRate);
+            setTimeout(() => this.debouncedResizeTimeout = 0, this.debounceRate);
     }
 
     render () {
@@ -162,9 +182,12 @@ export default class XMasonry extends React.Component {
             );
             return acc;
         }, [[], []]);
+        let actualHeight = elementsToMeasure.length
+            ? this.fixedHeight
+            : this.fixedHeight = this.state.containerHeight;
         return <div className="xmasonry" style={ {
             ...XMasonry.containerStyle,
-            height: this.state.height
+            height: actualHeight
         } } ref={ (c) => this.container = c }>
             { measuredElements }
             { elementsToMeasure }
