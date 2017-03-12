@@ -2,16 +2,22 @@ import React from "react";
 
 export default class XMasonry extends React.Component {
 
+    static propTypes = {
+        center: React.PropTypes.bool,
+        responsive: React.PropTypes.bool,
+        targetBlockWidth: React.PropTypes.number
+    };
+
     static defaultProps = {
+        center: true,
         responsive: true,
-        targetBlockWidth: 300,
-        center: true
+        targetBlockWidth: 300
     };
 
     state = {
         blocks: {},
         containerHeight: 0,
-        columns: 3,
+        columns: 1,
         containerWidth: 0
     };
 
@@ -139,9 +145,15 @@ export default class XMasonry extends React.Component {
             let blockWidth = +child.dataset.width || 1,
                 { col, height } = XMasonry.getBestFitColumn(heights, blockWidth),
                 newHeight = height + blocks[child.dataset.key].height;
-            blocks[child.dataset.key].left = col / this.columns;
+            blocks[child.dataset.key].left = this.containerWidth * col / this.columns;
             blocks[child.dataset.key].top = height;
             for (let i = 0; i < blockWidth; ++i) heights[col + i] = newHeight;
+        }
+        if (this.props.center && heights[heights.length - 1] === 0) {
+            let emptyColumns = 1;
+            for (; heights[heights.length - 1 - emptyColumns] === 0; ++emptyColumns);
+            let leftMargin = this.containerWidth * emptyColumns / this.columns / 2;
+            for (let key in blocks) blocks[key].left += leftMargin;
         }
         this.setState({ blocks, containerHeight: Math.max.apply(null, heights) });
     }
@@ -180,7 +192,7 @@ export default class XMasonry extends React.Component {
                         "style": {
                             width: Math.floor(width * this.containerWidth / this.columns),
                             height: measured.height,
-                            left: Math.floor(this.containerWidth * measured.left),
+                            left: Math.floor(measured.left),
                             top: measured.top
                         },
                         "measured": true,

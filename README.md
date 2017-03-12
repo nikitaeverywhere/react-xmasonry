@@ -76,12 +76,24 @@ transitions you like (`.xmasonry` and `.xblock` selectors), for example:
 
 See the [example page sources](https://github.com/ZitRos/react-xmasonry/blob/master/docs/index.jsx).
 
-Preview
--------
+Using Components
+----------------
 
-![Screenshot](https://cloud.githubusercontent.com/assets/4989256/23816799/6926b8c2-05f7-11e7-8766-bc3c7d10047c.png)
+There are several properties you can assign to `XMasonry` and `XBlock` components.
 
-Too see the preview in action, open [the demo page](https://zitros.github.io/react-xmasonry).
+### `<XMasonry>` Component Properties
+
+| Property | Default | Description |
+|---|---|---|
+| `center` | `true` | A boolean value determining whether nested `<XBlock>`s should be centered if there are empty columns left |
+| `responsive` | `true` | A boolean value determining whether the layout should be responsive to window size changes |
+| `targetBlockWidth` | `300` | A number which determines the "target" width in pixels of the nested `<XBlock>`s. The layout takes all available space, and determines the number of columns using this value. For example, if container has `600` px of available width and we specify `targetBlockWidth={200}`, we will get exactly `3` columns of `200` px width. And it will still be `3` columns if there is `660` pixels available, this time with each column taking `220` px. |
+
+### `<XBlock>` Component Properties
+
+| Property | Default | Description |
+|---|---|---|
+| `width` | `1` | A number which determines nested block width **in columns**. If the number of columns available is less than the specified width, nested block will shrink to fit available space. |
 
 [license-image]: https://img.shields.io/github/license/mashape/apistatus.svg
 [license-url]: LICENSE

@@ -9,13 +9,13 @@ class Wrapper extends React.Component {
                 id: 1,
                 header: "Hello!",
                 body: "This is the body. This is successfully rendered card."
-            },
-            {
-                id: 2,
-                header: "Hello 2!",
-                body: "This is the body. This is successfully rendered card. This is successfully rendered card. This is successfully rendered card. This is successfully rendered card. This is successfully rendered card.",
-                width: 2
             }
+            // , {
+            //     id: 2,
+            //     header: "Hello 2!",
+            //     body: "This is the body. This is successfully rendered card. This is successfully rendered card. This is successfully rendered card. This is successfully rendered card. This is successfully rendered card.",
+            //     width: 2
+            // }
             // ,{
             //     id: 3,
             //     header: "Hello 3!",

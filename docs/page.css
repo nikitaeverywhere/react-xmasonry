@@ -1,0 +1,10 @@
+html, body {
+    font-family: sans-serif;
+    font-size: 16px;
+}
+
+button {
+    font-size: 24px;
+    cursor: pointer;
+    user-select: none;
+}
