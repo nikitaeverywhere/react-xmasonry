@@ -4,7 +4,8 @@ export default class XMasonry extends React.Component {
 
     static defaultProps = {
         responsive: true,
-        targetBlockWidth: 300
+        targetBlockWidth: 300,
+        center: true
     };
 
     state = {
@@ -138,9 +139,8 @@ export default class XMasonry extends React.Component {
             let blockWidth = +child.dataset.width || 1,
                 { col, height } = XMasonry.getBestFitColumn(heights, blockWidth),
                 newHeight = height + blocks[child.dataset.key].height;
-            blocks[child.dataset.key].left =
-                `${ col * Math.floor(10000 / this.columns) / 100 }%`;
-            blocks[child.dataset.key].top = `${ height }px`;
+            blocks[child.dataset.key].left = col / this.columns;
+            blocks[child.dataset.key].top = height;
             for (let i = 0; i < blockWidth; ++i) heights[col + i] = newHeight;
         }
         this.setState({ blocks, containerHeight: Math.max.apply(null, heights) });
@@ -168,7 +168,6 @@ export default class XMasonry extends React.Component {
     }
 
     render () {
-        const columnWidthPercent = Math.floor(10000 / this.columns) / 100;
         const [measuredElements, elementsToMeasure]
             = React.Children.toArray(this.props.children).reduce((acc, element) => {
             let measured = this.state.blocks[element.key], // || undefined
@@ -179,8 +178,10 @@ export default class XMasonry extends React.Component {
                         "data-key": element.key,
                         "data-width": width,
                         "style": {
-                            width: `${ columnWidthPercent * width }%`,
-                            ...measured
+                            width: Math.floor(width * this.containerWidth / this.columns),
+                            height: measured.height,
+                            left: Math.floor(this.containerWidth * measured.left),
+                            top: measured.top
                         },
                         "measured": true,
                         "width": width
@@ -190,7 +191,7 @@ export default class XMasonry extends React.Component {
                         "data-width": width,
                         "data-xkey": element.key,
                         "style": {
-                            width: `${ columnWidthPercent * width }%`,
+                            width: Math.floor(width * this.containerWidth / this.columns),
                             visibility: "hidden"
                         },
                         "width": width
