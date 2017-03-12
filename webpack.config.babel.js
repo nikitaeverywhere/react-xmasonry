@@ -1,3 +1,5 @@
+import webpack from "webpack";
+
 export default {
     entry: {
         "./dist/index": "./src/index.jsx",
@@ -5,7 +7,9 @@ export default {
     },
     output: {
         path: "./",
-        filename: "[name].js"
+        filename: "[name].js",
+        library: "react-xmasonry",
+        libraryTarget: "umd"
     },
     externals: {
         "react": "React"
@@ -21,5 +25,8 @@ export default {
                 }
             }
         ]
-    }
+    },
+    plugins: [
+        new webpack.optimize.UglifyJsPlugin({ minimize: true })
+    ]
 }

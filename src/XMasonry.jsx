@@ -3,7 +3,8 @@ import React from "react";
 export default class XMasonry extends React.Component {
 
     static defaultProps = {
-        responsive: true
+        responsive: true,
+        targetBlockWidth: 300
     };
 
     state = {
@@ -45,7 +46,8 @@ export default class XMasonry extends React.Component {
      * state property.
      * @type {number}
      */
-    containerWidth = 0;
+    containerWidth = this.state.containerWidth;
+    columns = this.state.columns;
 
     static containerStyle = {
         position: `relative`
@@ -71,22 +73,32 @@ export default class XMasonry extends React.Component {
         return { col: minIndex, height: minHeight };
     }
 
+    /**
+     * Get number of columns by the given width in pixels.
+     * @param {number} width
+     */
+    getColumns (width) {
+        return Math.max(1, Math.round(width / this.props.targetBlockWidth));
+    }
+
     updateContainerWidth () {
         let newWidth = this.container.getBoundingClientRect().width;
-        console.log(newWidth, this.containerWidth);
+        // console.log(`container width update attempt, ${ newWidth }=${ this.containerWidth } (new=old)`);
         if (newWidth === this.containerWidth)
-            return;
+            return true;
+        // console.log(`need to update, columns=${ this.getColumns(newWidth) }, width=${ newWidth }, resetting blocks`);
         this.setState({
+            columns: this.columns = this.getColumns(newWidth),
             containerWidth: this.containerWidth = newWidth,
-            blocks: {} // the problem is that when layout is gone to recalculate again,
-                       // it need to consider that no scroll bars changes the width.
+            blocks: {}
         });
+        return false;
     }
 
     componentDidMount() {
         this.mounted = true;
-        this.updateContainerWidth();
-        this.measureChildren();
+        if (this.updateContainerWidth())
+            this.measureChildren();
     }
 
     componentWillUnmount () {
@@ -95,18 +107,22 @@ export default class XMasonry extends React.Component {
     }
 
     componentDidUpdate() {
-        this.updateContainerWidth();
-        this.measureChildren();
+        if (this.updateContainerWidth())
+            this.measureChildren();
     }
 
     measureChildren () {
         let blocks = {};
+        // console.log(`Recalculating positions...`);
+        // console.log(`Iterating over children:`, this.container.children);
         for (let i = 0; i < this.container.children.length; i++) {
             let child = this.container.children[i];
-            if (!child.dataset.hasOwnProperty("xkey")) continue;
+            // console.log(child.dataset, child.dataset.hasOwnProperty("xkey"), typeof child.dataset["xkey"] !== "undefined", child.dataset["xkey"]);
+            if (typeof child.dataset["xkey"] === "undefined") continue;
             let { height } = child.getBoundingClientRect();
             blocks[child.dataset["xkey"]] = { height: Math.ceil(height) };
         }
+        // console.log(`...of ${ Object.keys(blocks).length } children`);
         if (Object.keys(blocks).length > 0) this.recalculatePositions(blocks);
     }
 
@@ -115,7 +131,7 @@ export default class XMasonry extends React.Component {
                 ...this.state.blocks,
                 ...newBlocks
             },
-            heights = Array.from({ length: this.state.columns }, () => 0);
+            heights = Array.from({ length: this.columns }, () => 0);
         for (let i = 0; i < this.container.children.length; i++) {
             let child = this.container.children[i];
             if (!blocks.hasOwnProperty(child.dataset.key)) continue;
@@ -123,7 +139,7 @@ export default class XMasonry extends React.Component {
                 { col, height } = XMasonry.getBestFitColumn(heights, blockWidth),
                 newHeight = height + blocks[child.dataset.key].height;
             blocks[child.dataset.key].left =
-                `${ col * Math.floor(10000 / this.state.columns) / 100 }%`;
+                `${ col * Math.floor(10000 / this.columns) / 100 }%`;
             blocks[child.dataset.key].top = `${ height }px`;
             for (let i = 0; i < blockWidth; ++i) heights[col + i] = newHeight;
         }
@@ -152,18 +168,18 @@ export default class XMasonry extends React.Component {
     }
 
     render () {
-        const cardWidth = Math.floor(10000 / this.state.columns) / 100;
+        const columnWidthPercent = Math.floor(10000 / this.columns) / 100;
         const [measuredElements, elementsToMeasure]
             = React.Children.toArray(this.props.children).reduce((acc, element) => {
             let measured = this.state.blocks[element.key], // || undefined
-                width = Math.min(element.props.width, this.state.columns);
+                width = Math.min(element.props.width, this.columns);
             acc[measured ? 0 : 1].push(
                 measured
                     ? React.cloneElement(element, {
                         "data-key": element.key,
                         "data-width": width,
                         "style": {
-                            width: `${ cardWidth * element.props.width }%`,
+                            width: `${ columnWidthPercent * width }%`,
                             ...measured
                         },
                         "measured": true,
@@ -174,7 +190,7 @@ export default class XMasonry extends React.Component {
                         "data-width": width,
                         "data-xkey": element.key,
                         "style": {
-                            width: `${ cardWidth * element.props.width }%`,
+                            width: `${ columnWidthPercent * width }%`,
                             visibility: "hidden"
                         },
                         "width": width
@@ -185,6 +201,7 @@ export default class XMasonry extends React.Component {
         let actualHeight = elementsToMeasure.length
             ? this.fixedHeight
             : this.fixedHeight = this.state.containerHeight;
+        // console.log(`Rendering ${ measuredElements.length } measured elements and ${ elementsToMeasure.length } to measure`);
         return <div className="xmasonry" style={ {
             ...XMasonry.containerStyle,
             height: actualHeight

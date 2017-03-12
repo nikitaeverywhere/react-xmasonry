@@ -1,4 +1,3 @@
-//import "babel-polyfill";
 import React from "react";
 import { XMasonry, XBlock } from "../src/index.jsx";
 
@@ -82,24 +81,23 @@ class Wrapper extends React.Component {
                 width: Math.floor(1 + Math.random() * 1.5)
             })
         });
-        setTimeout(() => { document.body.scrollTop = 999999 }, 50);
+        setTimeout(() => { window.scrollTo(0, document.body.scrollHeight); }, 50);
     }
 
     render () {
         return <div>
-            <h3 style={{ textAlign: "center" }}>React-XMasonry Layout Demo</h3>
             <XMasonry>
                 { this.state.data.map((d, i) =>
                     <XBlock key={ d.id } width={ d.width || 1 }>
                         <div className="card">
-                            <h1>{ d.header }</h1>
+                            <h1>[{ d.id }] { d.header }</h1>
                             <p>{ d.body }</p>
                         </div>
                     </XBlock>
                 )}
             </XMasonry>
-            <div>
-                <button onClick={ this.addCard.bind(this) }>Add Card</button>
+            <div style={{ textAlign: "center", paddingTop: 20 }}>
+                <button onClick={ this.addCard.bind(this) }>Add Random Card</button>
             </div>
         </div>
     }

@@ -1,36 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8"/>
     <title>React Playground Savchenko</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1"/>
+    <meta name="keywords" content="react, js, javascript, masonry, layout, responsive, auto, automatic, grid, native, light, minimalistic"/>
     <!--script src="lib/babel.min.js"></script>
     <script src="lib/react.js"></script>
     <script type="text/javascript" src="../dist/index.js"></script>
     <script src="lib/react-dom.js"></script-->
+    <link rel="stylesheet" href="index.css"/>
     <script src="lib/react.js"></script>
     <script src="lib/react-dom.js"></script>
     <script src="index.js"></script>
-    <style type="text/css">
-        @keyframes comeIn {
-            0% { transform: scale(0) }
-            75% { transform: scale(1.03) }
-            100% { transform: scale(1) }
-        }
-
-        .xmasonry .xblock {
-            animation: comeIn ease 0.5s;
-            animation-iteration-count: 1;
-        }
-
-        .card {
-            margin: 10px;
-            padding: 5px;
-            border-radius: 10px;
-            box-shadow: 0 1px 3px darkgray;
-        }
-    </style>
 </head>
 <body onload="window.init();">
+    <a href="https://github.com/zitros/react-xmasonry" target="_blank" style="position: absolute; top: 0; right: 0; border: 0; display: inline-block; z-index: 999"><img src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub"></a>
+    <h3 style="text-align: center; margin-right: 150px">
+        <a href="https://github.com/zitros/react-xmasonry" target="_blank">React-XMasonry</a>
+        Layout Demo
+    </h3>
+    <p style="margin-right: 150px">
+        XMasonry is a simple, minimalistic and featured native masonry layout for React JS.
+        No dependencies, very tiny weight of ~2.5kb gzipped library code. The solution is oriented
+        on moderns browsers. You can still use this for older browsers such as IE 10 by using
+        <a target="_blank" href="https://en.wikipedia.org/wiki/Polyfill">polyfills</a>.
+    </p>
+    <h4>General Features</h4>
+    <ul>
+        <li>React JS <b>native</b> masonry layout implementation with no dependencies.</li>
+        <li>Minimalistic design and simple use case.</li>
+        <li>Ability to control blocks width (in columns) and column width.</li>
+        <li>Responsive, mobile-friendly approach (so there is no "fixed block width" option).</li>
+        <li>Fully customizable: use CSS animations and transitions you wish (use <i>.xmasonry</i> and <i>.xblock</i> selectors).</li>
+    </ul>
+    <p>
+        Check this page's <a target="_blank" href="https://github.com/ZitRos/react-xmasonry/blob/master/docs/index.css">CSS source</a>
+        and <a target="_blank" href="https://github.com/ZitRos/react-xmasonry/blob/master/docs/index.jsx">JavaScript source</a>. Use
+        the same approach for your pages.
+    </p>
+    <h1>Demo</h1>
     <div id="root"></div>
+    <div style="text-align: center;">
+        <div style="display: inline-block; max-width: 700px; margin-top: 50px">
+            <div>
+                react, js, javascript, masonry, layout, responsive, auto, automatic, grid,
+                native, light, minimalistic
+            </div>
+            <div>
+                Copyright © <a target="_blank" href="https://zitros.tk">Nikita Savchenko</a>
+            </div>
+            <div>
+                <a target="_blank" href="https://github.com/ZitRos/react-xmasonry/blob/master/LICENSE">License: MIT</a>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
