@@ -66,10 +66,12 @@ class Wrapper extends React.Component {
         ]
     };
 
+    key = this.state.data.length;
+
     addCard () {
         this.setState({
             data: this.state.data.concat({
-                id: this.state.data.length + 1,
+                id: ++this.key,
                 header: "This is a dummy card",
                 body: ["This is a dummy body. Dummy body. Dummy body. Dummy body. Dummy body"
                     , ". Dummy body. Dummy body. Dummy body. Dummy body. Dummy body"
@@ -82,6 +84,16 @@ class Wrapper extends React.Component {
             })
         });
         setTimeout(() => { window.scrollTo(0, document.body.scrollHeight); }, 50);
+    }
+
+    deleteCard () {
+        if (this.state.data.length < 1)
+            return;
+        let copy = this.state.data.slice();
+        copy.splice(Math.floor(Math.random()  * copy.length), 1);
+        this.setState({
+            data: copy
+        });
     }
 
     render () {
@@ -98,6 +110,7 @@ class Wrapper extends React.Component {
             </XMasonry>
             <div style={{ textAlign: "center", paddingTop: 20 }}>
                 <button onClick={ this.addCard.bind(this) }>Add Random Card</button>
+                <button onClick={ this.deleteCard.bind(this) }>Delete random card</button>
             </div>
         </div>
     }

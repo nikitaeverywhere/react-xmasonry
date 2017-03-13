@@ -113,6 +113,14 @@ export default class XMasonry extends React.Component {
         if (this.resizeListener) window.removeEventListener("resize", this.resizeListener);
     }
 
+    componentWillReceiveProps (newProps) {
+        if (newProps.children.length < this.props.children.length) {
+            this.setState({
+                blocks: {}
+            });
+        }
+    }
+
     componentDidUpdate() {
         if (this.updateContainerWidth())
             this.measureChildren();

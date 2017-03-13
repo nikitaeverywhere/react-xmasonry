@@ -4,7 +4,6 @@ html, body {
 }
 
 button {
-    font-size: 24px;
     cursor: pointer;
     user-select: none;
 }
