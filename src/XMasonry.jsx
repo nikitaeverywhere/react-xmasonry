@@ -189,7 +189,7 @@ export default class XMasonry extends React.Component {
 
     render () {
         const [measuredElements, elementsToMeasure]
-            = React.Children.toArray(this.props.children).reduce((acc, element) => {
+            = Array.prototype.slice.call(this.props.children).reduce((acc, element) => {
             let measured = this.state.blocks[element.key], // || undefined
                 width = Math.min(element.props.width, this.columns);
             acc[measured ? 0 : 1].push(
