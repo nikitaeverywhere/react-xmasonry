@@ -6,4 +6,5 @@ html, body {
 button {
     cursor: pointer;
     user-select: none;
+    margin: 5px;
 }

@@ -115,9 +115,15 @@ export default class XMasonry extends React.Component {
 
     componentWillReceiveProps (newProps) {
         if (newProps.children.length < this.props.children.length) {
-            this.setState({
-                blocks: {}
-            });
+            let newKeys = new Set(),
+                deleted = {};
+            for (let i = 0; i < newProps.children.length; i++)
+                newKeys.add(newProps.children[i].key);
+            for (let i = 0; i < this.props.children.length; i++) {
+                if (!newKeys.has(this.props.children[i].key))
+                    deleted[this.props.children[i].key] = {};
+            }
+            this.recalculatePositions(null, deleted);
         }
     }
 
@@ -141,15 +147,27 @@ export default class XMasonry extends React.Component {
         if (Object.keys(blocks).length > 0) this.recalculatePositions(blocks);
     }
 
-    recalculatePositions (newBlocks = null) {
-        let blocks = {
+    recalculatePositions (newBlocks = null, deletedBlocks = null) {
+        let blocks,
+            heights = Array.from({ length: this.columns }, () => 0);
+        if (deletedBlocks) {
+            blocks = {};
+            for (let key in this.state.blocks)
+                if (this.state.blocks.hasOwnProperty(key) && !deletedBlocks.hasOwnProperty(key))
+                    blocks[key] = this.state.blocks[key];
+            for (let key in newBlocks)
+                if (newBlocks.hasOwnProperty(key) && !deletedBlocks.hasOwnProperty(key))
+                    blocks[key] = newBlocks[key];
+        } else {
+            blocks = {
                 ...this.state.blocks,
                 ...newBlocks
-            },
-            heights = Array.from({ length: this.columns }, () => 0);
+            }
+        }
         for (let i = 0; i < this.container.children.length; i++) {
             let child = this.container.children[i];
             if (!blocks.hasOwnProperty(child.dataset.key)) continue;
+            if (deletedBlocks && deletedBlocks.hasOwnProperty(child.dataset.key)) continue;
             let blockWidth = +child.dataset.width || 1,
                 { col, height } = XMasonry.getBestFitColumn(heights, blockWidth),
                 newHeight = height + blocks[child.dataset.key].height;
@@ -161,7 +179,8 @@ export default class XMasonry extends React.Component {
             let emptyColumns = 1;
             for (; heights[heights.length - 1 - emptyColumns] === 0; ++emptyColumns);
             let leftMargin = this.containerWidth * emptyColumns / this.columns / 2;
-            for (let key in blocks) blocks[key].left += leftMargin;
+            for (let key in blocks)
+                if (blocks.hasOwnProperty(key)) blocks[key].left += leftMargin;
         }
         this.setState({ blocks, containerHeight: Math.max.apply(null, heights) });
     }
