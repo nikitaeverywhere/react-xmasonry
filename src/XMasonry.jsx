@@ -207,47 +207,44 @@ export default class XMasonry extends React.Component {
     }
 
     render () {
-        const [measuredElements, elementsToMeasure]
-            = Array.prototype.slice.call(this.props.children).reduce((acc, element) => {
+        let toMeasure = 0;
+        const elements = Array.prototype.slice.call(this.props.children).map((element) => {
             let measured = this.state.blocks[element.key], // || undefined
                 width = Math.min(element.props.width, this.columns);
-            acc[measured ? 0 : 1].push(
-                measured
-                    ? React.cloneElement(element, {
-                        "data-key": element.key,
-                        "data-width": width,
-                        "style": {
-                            width: Math.floor(width * this.containerWidth / this.columns),
-                            height: measured.height,
-                            left: Math.floor(measured.left),
-                            top: measured.top
-                        },
-                        "measured": true,
-                        "width": width
-                    })
-                    : React.cloneElement(element, {
-                        "data-key": element.key,
-                        "data-width": width,
-                        "data-xkey": element.key,
-                        "style": {
-                            width: Math.floor(width * this.containerWidth / this.columns),
-                            visibility: "hidden"
-                        },
-                        "width": width
-                    })
-            );
-            return acc;
-        }, [[], []]);
-        let actualHeight = elementsToMeasure.length
+            if (!measured) ++toMeasure;
+            return measured
+                ? React.cloneElement(element, {
+                    "data-key": element.key,
+                    "data-width": width,
+                    "style": {
+                        width: Math.floor(width * this.containerWidth / this.columns),
+                        height: measured.height,
+                        left: Math.floor(measured.left),
+                        top: measured.top
+                    },
+                    "measured": true,
+                    "width": width
+                })
+                : React.cloneElement(element, {
+                    "data-key": element.key,
+                    "data-width": width,
+                    "data-xkey": element.key,
+                    "style": {
+                        width: Math.floor(width * this.containerWidth / this.columns),
+                        visibility: "hidden"
+                    },
+                    "width": width
+                });
+        });
+        let actualHeight = toMeasure
             ? this.fixedHeight
             : this.fixedHeight = this.state.containerHeight;
-        // console.log(`Rendering ${ measuredElements.length } measured elements and ${ elementsToMeasure.length } to measure`);
+        // console.log(`Rendering ${ elements.length - toMeasure } measured elements and ${ toMeasure } to measure`);
         return <div className="xmasonry" style={ {
             ...XMasonry.containerStyle,
             height: actualHeight
         } } ref={ (c) => this.container = c }>
-            { measuredElements }
-            { elementsToMeasure }
+            { elements }
         </div>;
     }
 
