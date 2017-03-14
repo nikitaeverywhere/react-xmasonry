@@ -139,9 +139,9 @@ export default class XMasonry extends React.Component {
         for (let i = 0; i < this.container.children.length; i++) {
             let child = this.container.children[i];
             // console.log(child.dataset, child.dataset.hasOwnProperty("xkey"), typeof child.dataset["xkey"] !== "undefined", child.dataset["xkey"]);
-            if (typeof child.dataset["xkey"] === "undefined") continue;
+            if (!child.hasAttribute("data-xkey")) continue;
             let { height } = child.getBoundingClientRect();
-            blocks[child.dataset["xkey"]] = { height: Math.ceil(height) };
+            blocks[child.getAttribute("data-xkey")] = { height: Math.ceil(height) };
         }
         // console.log(`...of ${ Object.keys(blocks).length } children`);
         if (Object.keys(blocks).length > 0) this.recalculatePositions(blocks);
@@ -165,14 +165,15 @@ export default class XMasonry extends React.Component {
             }
         }
         for (let i = 0; i < this.container.children.length; i++) {
-            let child = this.container.children[i];
-            if (!blocks.hasOwnProperty(child.dataset.key)) continue;
-            if (deletedBlocks && deletedBlocks.hasOwnProperty(child.dataset.key)) continue;
-            let blockWidth = +child.dataset.width || 1,
+            let child = this.container.children[i],
+                key = child.getAttribute("data-key");
+            if (!blocks.hasOwnProperty(key)) continue;
+            if (deletedBlocks && deletedBlocks.hasOwnProperty(key)) continue;
+            let blockWidth = +child.getAttribute("data-width") || 1,
                 { col, height } = XMasonry.getBestFitColumn(heights, blockWidth),
-                newHeight = height + blocks[child.dataset.key].height;
-            blocks[child.dataset.key].left = this.containerWidth * col / this.columns;
-            blocks[child.dataset.key].top = height;
+                newHeight = height + blocks[key].height;
+            blocks[key].left = this.containerWidth * col / this.columns;
+            blocks[key].top = height;
             for (let i = 0; i < blockWidth; ++i) heights[col + i] = newHeight;
         }
         if (this.props.center && heights[heights.length - 1] === 0) {

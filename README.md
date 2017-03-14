@@ -74,7 +74,7 @@ transitions you like (`.xmasonry` and `.xblock` selectors), for example:
 }
 ```
 
-See the [example page sources](https://github.com/ZitRos/react-xmasonry/blob/master/docs/index.jsx).
+See the [example page source here](https://github.com/ZitRos/react-xmasonry/blob/master/docs/jsx/DemoCards.jsx).
 
 Using Components
 ----------------

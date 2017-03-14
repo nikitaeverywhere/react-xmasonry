@@ -12,14 +12,9 @@ export default class XBlock extends React.Component {
     };
 
     render () {
-        let dataAttributes = {
-            "data-key": this.props["data-key"],
-            "data-width": this.props["data-width"]
-        };
-        if (this.props["data-xkey"])
-            dataAttributes["data-xkey"] = this.props["data-xkey"];
-        return <div { ...dataAttributes } style={ { ...this.props.style, ...XBlock.defaultStyle } }
-                    className={ this.props.measured ? "xblock" : "" }>
+        let { width, measured, style, ...rest } = this.props;
+        return <div { ...rest } style={ { ...style, ...XBlock.defaultStyle } }
+                    className={ this.props.measured ? `xblock` : `` }>
             { this.props.children }
         </div>;
     }
