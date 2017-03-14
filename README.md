@@ -73,9 +73,9 @@ transitions you like (`.xmasonry` and `.xblock` selectors), for example:
 }
 
 .card {
-    margin: 10px;
+    margin: 7px;
     padding: 5px;
-    border-radius: 10px;
+    border-radius: 3px;
     box-shadow: 0 1px 3px darkgray;
 }
 ```
