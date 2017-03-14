@@ -23,6 +23,12 @@ Installation
 npm install react-xmasonry --save
 ```
 
+Or, if you use the old-style `<script>` tag, try the next:
+
+```js
+<script type="text/javascript" src="https://raw.githubusercontent.com/ZitRos/react-xmasonry/master/dist/index.js"></script>
+```
+
 Example of Usage
 ----------------
 
