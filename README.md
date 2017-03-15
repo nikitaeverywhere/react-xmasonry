@@ -72,6 +72,7 @@ transitions you like (`.xmasonry` and `.xblock` selectors), for example:
 .xmasonry .xblock {
     animation: comeIn ease 0.5s;
     animation-iteration-count: 1;
+    transition: all .3s ease;
 }
 
 .card {
