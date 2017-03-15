@@ -8,7 +8,8 @@ export default class XBlock extends React.Component {
     };
 
     static defaultStyle = {
-        position: `absolute`
+        position: `absolute`,
+        boxSizing: `border-box`
     };
 
     render () {

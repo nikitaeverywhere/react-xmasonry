@@ -17,9 +17,20 @@ h1, h2, h3, h4, h5, h6 {
 
 p {
     margin: 4px 0;
+    text-indent: 40px;
+    text-align: justify;
+    text-justify: newspaper;
 }
 
-.sourceLinks {
+.centerText {
     text-align: center;
+}
+
+.littleGray {
+    color: gray;
     font-size: 12px;
+}
+
+.demo {
+    margin: 40px 0;
 }

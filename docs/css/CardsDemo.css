@@ -1,16 +1,16 @@
 @keyframes comeIn {
-    0% { transform: scale(0) }
-    75% { transform: scale(1.03) }
-    100% { transform: scale(1) }
+    0% { transform: scale(.5); opacity: 0; }
+    75% { transform: scale(1.03); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
 }
 
-.xmasonry .xblock {
+.CardsDemo .xmasonry .xblock {
     animation: comeIn ease 0.5s;
     animation-iteration-count: 1;
     transition: all .3s ease;
 }
 
-.card {
+.CardsDemo .card {
     margin: 7px;
     padding: 5px;
     border-radius: 3px;

@@ -24,7 +24,7 @@ const initialData = [
     }
 ];
 
-export default class DemoOne extends React.Component {
+export default class CardsDemo extends React.Component {
 
     state = {
         data: initialData
@@ -61,20 +61,15 @@ export default class DemoOne extends React.Component {
     }
 
     render () {
-        requestAnimationFrame(() => window.scrollTo(0, document.body.scrollHeight));
-        return <div>
-            <h1 style={{ textAlign: "center" }}>Demo Cards</h1>
-            <div className="sourceLinks"><a target="_blank" href="https://github.com/ZitRos/react-xmasonry/blob/master/docs/css/DemoCards.css">CSS source</a> | <a target="_blank" href="https://github.com/ZitRos/react-xmasonry/blob/master/docs/jsx/DemoCards.jsx">JavaScript source</a></div>
-            <XMasonry>
-                { this.state.data.map((d, i) =>
-                    <XBlock key={ d.id } width={ d.width || 1 }>
-                        <div className="card" style={{ backgroundColor: d.color }}>
-                            <h1>{ d.header }<sup>{ d.id }</sup></h1>
-                            <p>{ d.body }</p>
-                        </div>
-                    </XBlock>
-                )}
-            </XMasonry>
+        return <div className="demo CardsDemo" id="CardsDemo">
+            <XMasonry>{ this.state.data.map((d, i) =>
+                <XBlock key={ d.id } width={ d.width || 1 }>
+                    <div className="card" style={{ backgroundColor: d.color }}>
+                        <h1>{ d.header }<sup>{ d.id }</sup></h1>
+                        <p>{ d.body }</p>
+                    </div>
+                </XBlock>
+            )}</XMasonry>
             <div style={{ textAlign: "center" }}>
                 <button onClick={ this.addCard.bind(this) }>Add Random Card</button>
                 <button onClick={ this.deleteCard.bind(this) }>Delete random card</button>

@@ -1,6 +1,7 @@
 # react-xmasonry
 
 [![Dependencies][dep-image]][dep-url]
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c073dc0dc2744d5b950418bf5fbcc820)](https://www.codacy.com/app/ZitRos/react-xmasonry?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ZitRos/react-xmasonry&amp;utm_campaign=Badge_Grade)
 [![License][license-image]][license-url]
 
 Simple, minimalistic and featured native masonry layout for React JS.
@@ -80,7 +81,7 @@ transitions you like (`.xmasonry` and `.xblock` selectors), for example:
 }
 ```
 
-See the [example page source here](https://github.com/ZitRos/react-xmasonry/blob/master/docs/jsx/DemoCards.jsx).
+See the [example page source here](https://github.com/ZitRos/react-xmasonry/blob/master/docs/jsx/CardsDemo.jsx).
 
 Using Components
 ----------------
