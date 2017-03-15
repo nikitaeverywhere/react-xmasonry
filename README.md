@@ -1,21 +1,22 @@
 # react-xmasonry
 
-[![Dependencies][dep-image]][dep-url]
+[![Dependencies](https://img.shields.io/badge/dependencies-none-brightgreen.svg)](http://npm.anvaka.com/#/view/2d/react-xmasonry)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/c073dc0dc2744d5b950418bf5fbcc820)](https://www.codacy.com/app/ZitRos/react-xmasonry?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ZitRos/react-xmasonry&amp;utm_campaign=Badge_Grade)
-[![License][license-image]][license-url]
+[![Development Badge](https://img.shields.io/badge/in%20active-development-blue.svg)](https://github.com/ZitRos/react-xmasonry/commits/master)
+[![License](https://img.shields.io/github/license/mashape/apistatus.svg)](LICENSE)
 
-Simple, minimalistic and featured native masonry layout for React JS.
+Responsive minimalistic and featured __native__ masonry layout for React JS.
 
 <h4>General Features</h4>
 <ul>
-    <li>React JS <b>native</b> masonry layout implementation with no dependencies.</li>
+    <li>React JS native masonry layout implementation with no dependencies.</li>
     <li>Minimalistic design and simple use case.</li>
     <li>Ability to control blocks width (in columns) and column width.</li>
     <li>Responsive, mobile-friendly approach (so there is no "fixed block width" option).</li>
     <li>Fully customizable: use CSS animations and transitions you wish (use <i>.xmasonry</i> and <i>.xblock</i> selectors).</li>
 </ul>
 
-Visit [the demo page](https://zitros.github.io/react-xmasonry) for more details.
+## [Demo](https://zitros.github.io/react-xmasonry)
 
 Installation
 ------------
@@ -81,10 +82,10 @@ transitions you like (`.xmasonry` and `.xblock` selectors), for example:
 }
 ```
 
-See the [example page source here](https://github.com/ZitRos/react-xmasonry/blob/master/docs/jsx/CardsDemo.jsx).
+And all the further magic XMasonry will do for you. See the [example page source here](https://github.com/ZitRos/react-xmasonry/blob/master/docs/jsx/CardsDemo.jsx).
 
-Using Components
-----------------
+Configuring Components
+----------------------
 
 There are several properties you can assign to `XMasonry` and `XBlock` components.
 
@@ -92,17 +93,52 @@ There are several properties you can assign to `XMasonry` and `XBlock` component
 
 | Property | Default | Description |
 |---|---|---|
-| `center` | `true` | A boolean value determining whether nested `<XBlock>`s should be centered if there are empty columns left |
-| `responsive` | `true` | A boolean value determining whether the layout should be responsive to window size changes |
-| `targetBlockWidth` | `300` | A number which determines the "target" width in pixels of the nested `<XBlock>`s. The layout takes all available space, and determines the number of columns using this value. For example, if container has `600` px of available width and we specify `targetBlockWidth={200}`, we will get exactly `3` columns of `200` px width. And it will still be `3` columns if there is `660` pixels available, this time with each column taking `220` px. |
+| `center` | `true` | A `boolean` value determining whether nested `<XBlock>`s should be centered if there are empty columns left |
+| `responsive` | `true` | A `boolean` value determining whether the layout should be responsive to window size changes |
+| `targetBlockWidth` | `300` | A `number` which determines the "target" width in pixels of the nested `<XBlock>`s. The layout takes all available space, and determines the number of columns using this value. For example, if container has `600` px of available width and we specify `targetBlockWidth={200}`, we will get exactly `3` columns of `200` px width. And it will still be `3` columns if there is `660` pixels available, this time with each column taking `220` px. |
+| `updateOnAnimationEnd` | `true` | When animating grid with CSS animations, this will trigger layout to update after animation ends on `.xblock` block. |
+| `updateOnImagesLoad` | `true` | When layout contains images, it takes a little while until images are loaded. This causes incorrect blocks heights calculations at the beginning. This option allows to auto-update grid sizes when images complete loading. |
 
 ### `<XBlock>` Component Properties
 
 | Property | Default | Description |
 |---|---|---|
-| `width` | `1` | A number which determines nested block width **in columns**. If the number of columns available is less than the specified width, nested block will shrink to fit available space. |
+| `width` | `1` | A `number` which determines nested block width **in columns**. If the number of columns available is less than the specified width, nested block will shrink to fit available space. |
 
-[license-image]: https://img.shields.io/github/license/mashape/apistatus.svg
-[license-url]: LICENSE
-[dep-image]: https://img.shields.io/badge/dependencies-none-brightgreen.svg
-[dep-url]: http://npm.anvaka.com/#/view/2d/react-xmasonry
+### Accessing `<XMasonry>` by Reference
+
+You can access `<XMasonry>` component by reference, but do it only if it is necessarily (for example,
+when inner content dynamically changes in size):
+
+```jsx
+<XMasonry ref={ (x) => this.xMasonry = x }>
+    // ...
+</XMasonry>
+```
+
+Note that all the listed properties of `<XMasonry>` component are **read-only**.
+
+| Ref Property | Type | Description |
+|---|---|---|
+| `columns` | `number` | The number of currently rendered columns. |
+| `container` | `HTMLElement` | The `<div>` block containing layout. |
+| `update` | `function` | Trigger this function to update nested `XBlock`s sizes and positions. It is **safe to trigger this function multiple times**, the size update is optimized. |
+
+#### XMasonry Under the Hood
+
+Technically, XMasonry component renders 3 times:
+
+1. "Empty Render" (ER), when XMasonry just renders its empty container and measures the available width;
+2. "Invisible Render" (IR), when XMasonry renders `visibility: hidden` blocks width computed column widths to measure their heights;
+3. And finally "Actual Render" (AR), when it renders elements with computed dimensions and positions. The `.xblock` style gets applied here only, so you can put animations on it.
+
+This stages take around 3-4 frames to appear on the screen (~90ms).
+
+Each time when elements changes in masonry layout (images load and animation end), the XMasonry 
+update method is triggered. It goes through rendered elements this time and looks for any size
+changes there. Thanks to React, all the DOM updates are optimized here and this function is very
+light to call. You can trigger XMasonry `update` on your own, whenever you need to update the
+layout.
+
+Once the window size gets changed (default behavior), the "force update" technique is applied, which
+do the IR and AR phases again.

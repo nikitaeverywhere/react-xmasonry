@@ -4,15 +4,25 @@
     100% { transform: scale(1); opacity: 1; }
 }
 
-#CardsDemo .xmasonry .xblock {
+#ContentChangesDemo .xmasonry .xblock {
     animation: comeIn ease 0.5s;
     animation-iteration-count: 1;
     transition: all .3s ease;
 }
 
-#CardsDemo .card {
+#ContentChangesDemo .card {
+    position: relative;
     margin: 7px;
-    padding: 5px;
     border-radius: 3px;
     box-shadow: 0 1px 3px darkgray;
+    background: white;
+    overflow: hidden;
+}
+
+#ContentChangesDemo .card img {
+    max-width: 100%;
+}
+
+#ContentChangesDemo .card .body {
+    padding: 5px;
 }

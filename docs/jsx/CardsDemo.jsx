@@ -1,3 +1,8 @@
+/**
+ * This example demonstrates the basic usage of react-xmasonry component.
+ * See this in action: https://zitros.github.io/react-xmasonry
+ */
+
 import React from "react";
 import { XMasonry, XBlock } from "../../src/index.jsx"; // from "react-xmasonry"
 import * as utils from "./utils.jsx";
@@ -61,7 +66,7 @@ export default class CardsDemo extends React.Component {
     }
 
     render () {
-        return <div className="demo CardsDemo" id="CardsDemo">
+        return <div className="demo" id="CardsDemo">
             <XMasonry>{ this.state.data.map((d, i) =>
                 <XBlock key={ d.id } width={ d.width || 1 }>
                     <div className="card" style={{ backgroundColor: d.color }}>

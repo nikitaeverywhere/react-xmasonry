@@ -1,3 +1,5 @@
+let globalID = 0;
+
 export function getRandomColor () {
     const colors = ["#ffff8d", "#ff8a80", "#a7ffeb", "#ffd180", "#80d8ff", "#ccff90", "#cfd8dc"];
     return colors[Math.floor(Math.random() * colors.length)];
@@ -22,6 +24,18 @@ export function getRandomText (length = undefined) {
         start = Math.floor(Math.random() * (sentences.length - 2)),
         len = length || (1 + Math.floor(Math.random() * (sentences.length - start + 1)));
     return sentences.splice(start, len).join(".");
+}
+
+export function generateArticles () {
+    return Array.from({ length: 7 + Math.floor(Math.random() * 5) },
+        () => ({
+            id: ++globalID,
+            title: getRandomText(1),
+            text: `${ getRandomText() }.`,
+            cover: `img/wallpaper.jpg`,
+            cardWidth: Math.random() > 0.8 ? 2 : 1
+        })
+    );
 }
 
 export function getRandomCard (id) {

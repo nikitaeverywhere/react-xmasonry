@@ -4,24 +4,24 @@
     100% { transform: scale(1); opacity: 1; }
 }
 
-.ArticlesDemo .xmasonry .xblock {
+#ArticlesDemo .xmasonry .xblock {
     animation: comeIn ease 0.5s;
     animation-iteration-count: 1;
     transition: all .3s ease;
 }
 
 /****** These styles fix the cover ratio ********/
-.ArticlesDemo .imageBox {
+#ArticlesDemo .imageBox {
     position: relative;
 }
 
-.ArticlesDemo .imageBox:before {
+#ArticlesDemo .imageBox:before {
     content: "";
     display: block;
     padding-top: 50%; /* initial ratio of 2:1*/
 }
 
-.ArticlesDemo .image {
+#ArticlesDemo .image {
     position:  absolute;
     top: 0;
     left: 0;
@@ -30,21 +30,22 @@
 }
 /****** ******************************** ********/
 
-.ArticlesDemo .image {
+#ArticlesDemo .image {
     box-shadow: inset 0 0 3px darkgray;
     background-position: center;
     background-size: cover;
     overflow: hidden;
 }
 
-.ArticlesDemo .article {
+#ArticlesDemo .article {
     margin: 7px;
     padding: 5px;
     border-radius: 3px;
     box-shadow: 0 1px 3px darkgray;
+
 }
 
-.ArticlesDemo .article .title {
+#ArticlesDemo .article .title {
     position: absolute;
     bottom: 0;
     color: white;
