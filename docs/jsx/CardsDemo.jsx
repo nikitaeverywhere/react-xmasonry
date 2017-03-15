@@ -67,6 +67,11 @@ export default class CardsDemo extends React.Component {
 
     render () {
         return <div className="demo" id="CardsDemo">
+            <div style={{ textAlign: "center" }}>
+                <button onClick={ this.addCard.bind(this) }>Add Random Card</button>
+                <button onClick={ this.deleteCard.bind(this) }>Delete random card</button>
+                <button onClick={ this.replaceCard.bind(this) }>Replace random card</button>
+            </div>
             <XMasonry>{ this.state.data.map((d, i) =>
                 <XBlock key={ d.id } width={ d.width || 1 }>
                     <div className="card" style={{ backgroundColor: d.color }}>
@@ -75,11 +80,6 @@ export default class CardsDemo extends React.Component {
                     </div>
                 </XBlock>
             )}</XMasonry>
-            <div style={{ textAlign: "center" }}>
-                <button onClick={ this.addCard.bind(this) }>Add Random Card</button>
-                <button onClick={ this.deleteCard.bind(this) }>Delete random card</button>
-                <button onClick={ this.replaceCard.bind(this) }>Replace random card</button>
-            </div>
         </div>
     }
 
