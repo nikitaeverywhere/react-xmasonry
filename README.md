@@ -19,6 +19,9 @@ Responsive minimalistic and featured __native__ masonry layout for React JS.
 
 ## [Demo](https://zitros.github.io/react-xmasonry)
 
+Check the XMasonry [demos page](https://zitros.github.io/react-xmasonry). You can also see the
+[notes application](https://zitros.github.io/easy-local-notes/) made with `react-xmasonry`.
+
 Installation
 ------------
 
@@ -127,7 +130,7 @@ Note that all the listed properties of `<XMasonry>` component are **read-only**.
 | `container` | `HTMLElement` | The `<div>` block containing layout. |
 | `update` | `function` | Trigger this function to update nested `XBlock`s sizes and positions. It is **safe to trigger this function multiple times**, the size update is optimized. |
 
-#### XMasonry Under the Hood
+### XMasonry Under the Hood
 
 Technically, XMasonry component renders 3 times:
 
