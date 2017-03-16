@@ -13,6 +13,15 @@ export default class ContentChangesDemo extends React.Component {
         data: utils.generateArticles()
     };
 
+    xMasonry = null;
+
+    componentDidMount () {
+        // to handle font changes after grid initializes, we can use modern CSS font loading API
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => {
+            this.xMasonry.update();
+        });
+    }
+
     render () {
         return <div className="demo" id="ContentChangesDemo">
             <div className="centerText">
@@ -20,9 +29,9 @@ export default class ContentChangesDemo extends React.Component {
                     Regenerate
                 </button>
             </div>
-            <XMasonry>{ this.state.data.map((article, i) =>
+            <XMasonry ref={ (x) => this.xMasonry = x }>{ this.state.data.map((article, i) =>
                 <XBlock key={ article.id } width={ article.cardWidth }>
-                    <div className="card">
+                    <div className="card" style={{position: "relative"}}>
                         <img src={ article.cover } alt="image"/>
                         <div className="body">
                             <h3>{ article.title }</h3>

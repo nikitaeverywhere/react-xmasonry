@@ -21,9 +21,10 @@ window.init = function () {
             <h1 style={{ textAlign: "center" }}>Content Changes Demo</h1>
             <div className="littleGray limited centerText">
                 When grid items change their size dynamically (like images which are not loaded
-                yet), you need to update the layout manually each time when changes happen.<br/>
-                Anytime, you can update XMasonry manually by triggering
-                its <code>update</code> method.
+                yet or after CSS stylesheets finish their load), you need to update the layout
+                manually each time when changes happen.<br/>
+                Anytime, you can update XMasonry manually by triggering its <code>update</code>
+                method.
             </div>
             <div className="littleGray centerText">
                 <a target="_blank" href="https://github.com/ZitRos/react-xmasonry/blob/master/docs/css/ContentChangesDemo.css">CSS source</a> | <a target="_blank" href="https://github.com/ZitRos/react-xmasonry/blob/master/docs/jsx/ContentChangesDemo.jsx">JavaScript source</a>

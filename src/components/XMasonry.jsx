@@ -271,17 +271,23 @@ export default class XMasonry extends React.Component {
                             width: Math.floor(width * this.containerWidth / this.columns),
                             visibility: "hidden"
                         },
-                        "width": width
+                        "width": width,
+                        "parent": this
                     });
         });
         let actualHeight = elements.length - toMeasure > 0 || elements.length === 0
             ? this.fixedHeight = this.state.containerHeight
             : this.fixedHeight;
-        return <div className="xmasonry" style={ {
-            ...XMasonry.containerStyle,
-            height: actualHeight,
-            ...this.props.style
-        } } ref={ (c) => this.container = c }>
+        const { center, maxColumns, responsive, targetBlockWidth, updateOnAnimationEnd,
+            updateOnImagesLoad, className, style, ...restProps } = this.props;
+        return <div className={className ? `xmasonry ${className}` : `xmasonry`}
+                    style={ {
+                        ...XMasonry.containerStyle,
+                        height: actualHeight,
+                        ...style
+                    } }
+                    ref={ (c) => this.container = c }
+                    { ...restProps }>
             { elements }
         </div>;
     }
