@@ -216,7 +216,14 @@ export default class XMasonry extends React.Component {
      * Update nested `XBlock`s sizes and positions. It is safe to trigger this function multiple
      * times, the size update is optimized.
      */
-    update = debounce(this.updateInternal.bind(this, true));
+    update = debounce(() => !this.updateLock && this.updateInternal(true));
+
+    /**
+     * Update lock is used to prevent updates during animation play on xblock.
+     * @see XBlock
+     * @type {boolean}
+     */
+    updateLock = false;
 
     /**
      * This flag has just an optimization purpose: it prevents layout from running updateInternal
@@ -233,7 +240,7 @@ export default class XMasonry extends React.Component {
      */
     updateInternal (external = false) {
 
-        // prevent from updating layout twice when force update is triggered.
+        // prevent from updating layout twice when force update is triggered
         if (this.externalUpdate) { this.externalUpdate = false; return; }
         if (external) { this.externalUpdate = true; }
 

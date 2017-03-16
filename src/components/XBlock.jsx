@@ -12,7 +12,6 @@ export default class XBlock extends React.Component {
     static defaultProps = {
         width: 1,
         measured: false
-        // , update: () => {}
     };
 
     static defaultStyle = {
@@ -32,31 +31,24 @@ export default class XBlock extends React.Component {
      */
     placed = false;
 
-    /**
-     * Identifies whether this .xblock is in animating state.
-     * @type {boolean}
-     */
-    animating = false;
-
     componentDidUpdate () {
-        if (this.placed && !this.props.parent)
+        if (this.placed || !this.props.parent)
             return;
         this.placed = true;
         const parent = this.props.parent;
-        requestAnimationFrame(() => {
-            if (!this.divElement) return;
+        requestAnimationFrame(() => { if (!this.divElement) return;
             let images = Array.from(this.divElement.querySelectorAll(`img`)),
                 handleImages = images.length > 0 && parent.props.updateOnImagesLoad;
-            if (handleImages) images.forEach(
-                (img) => img.addEventListener(`load`, () => !this.animating && parent.update())
+            if (handleImages) images.forEach((img) => !img.complete
+                && img.addEventListener(`load`, () => !parent.updateLock && parent.update())
             );
             if (parent.props.updateOnAnimationEnd !== false // undefined !== false => auto
                     && (handleImages || parent.props.updateOnAnimationEnd)) {
-                this.divElement.addEventListener(`animationstart`, () => this.animating = true);
-                this.divElement.addEventListener(
-                    `animationend`,
-                    () => !(this.animating = false) && parent.update()
-                );
+                this.divElement.addEventListener(`animationstart`, () => parent.updateLock = true);
+                this.divElement.addEventListener(`animationend`, () => {
+                    parent.updateLock = false;
+                    parent.update();
+                });
             }
         });
     }

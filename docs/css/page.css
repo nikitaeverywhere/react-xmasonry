@@ -6,6 +6,10 @@ html, body {
     background-color: #eee;
 }
 
+body {
+    overflow-x: hidden;
+}
+
 button {
     cursor: pointer;
     user-select: none;
