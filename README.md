@@ -94,10 +94,11 @@ There are several properties you can assign to `XMasonry` and `XBlock` component
 
 | Property | Default | Description |
 |---|---|---|
-| `center` | `true` | A `boolean` value determining whether nested `<XBlock>`s should be centered if there are empty columns left |
-| `responsive` | `true` | A `boolean` value determining whether the layout should be responsive to window size changes |
-| `targetBlockWidth` | `300` | A `number` which determines the "target" width in pixels of the nested `<XBlock>`s. The layout takes all available space, and determines the number of columns using this value. For example, if container has `600` px of available width and we specify `targetBlockWidth={200}`, we will get exactly `3` columns of `200` px width. And it will still be `3` columns if there is `660` pixels available, this time with each column taking `220` px. |
-| `updateOnAnimationEnd` | auto | A `boolean` value determining whether grid needs to be updated when the CSS animation on `.xblock` ends. It may be useful to set this to `true` only when content changes during the animation. Default `auto` means that no update will be triggered on animation end if there is no loading images detected (default). |
+| `center` | `true` | A `boolean` value determining whether nested `<XBlock>`s should be centered if there are some empty columns left. |
+| `maxColumns` | `Infinity` | A `number` identifying the maximum columns number. |
+| `responsive` | `true` | A `boolean` value determining whether the layout should be responsive to window size changes. |
+| `targetBlockWidth` | `300` | A `number` which determines the "target" width in pixels of the nested `<XBlock>`s. The layout takes all available space, and determines the number of columns using this value. For example, if container has `600` px of available width and we specify `targetBlockWidth={200}`, we will get exactly `3` columns of `200` px width. It will still be `3` columns if there is `660` pixels available, this time with each column taking `220` px. The simplified expression for number of columns is the following: `Math.max(1, Math.round(containerWidth / targetBlockWidth))`. |
+| `updateOnAnimationEnd` | auto | A `boolean` value determining whether grid needs to be updated when the CSS animation on `.xblock` ends. It may be useful to set this to `true` only when content changes during the animation. Default `auto` means that no updates will be triggered on animation end if there is no loading images detected (default). |
 | `updateOnImagesLoad` | `true` | A `boolean` value determining whether the layout should be updated when images finish loading. It normally takes a little while until images are loaded, and this causes incorrect blocks heights calculations at the beginning. This option allows to auto-update grid sizes when images complete loading. If layout contains no images, no handlers will be assigned. |
 
 ### `<XBlock>` Component Properties

@@ -8,6 +8,7 @@ export default class XMasonry extends React.Component {
 
     static propTypes = {
         center: React.PropTypes.bool,
+        maxColumns: React.PropTypes.number,
         responsive: React.PropTypes.bool,
         targetBlockWidth: React.PropTypes.number,
         updateOnAnimationEnd: React.PropTypes.bool,
@@ -16,6 +17,7 @@ export default class XMasonry extends React.Component {
 
     static defaultProps = {
         center: true,
+        maxColumns: Infinity,
         responsive: true,
         targetBlockWidth: 300,
         updateOnAnimationEnd: undefined,
@@ -26,10 +28,11 @@ export default class XMasonry extends React.Component {
         position: `relative`
     };
 
-    static getBestFitColumn (heights, width = 1) {
+    getBestFitColumn (heights, width = 1) {
+        const actualCols = Math.min(heights.length - width + 1, this.props.maxColumns - width + 1);
         let minIndex = 0,
             minHeight = Infinity;
-        for (let i = 0; i < heights.length - width + 1; ++i) {
+        for (let i = 0; i < actualCols; ++i) {
             let currentMinHeight = Math.max.apply(null, heights.slice(i, i + width));
             if (currentMinHeight < minHeight) {
                 minHeight = currentMinHeight;
@@ -193,7 +196,7 @@ export default class XMasonry extends React.Component {
             if (!blocks.hasOwnProperty(key)) continue;
             if (deletedBlocks && deletedBlocks.hasOwnProperty(key)) continue;
             let blockWidth = +child.getAttribute("data-width") || 1,
-                { col, height } = XMasonry.getBestFitColumn(heights, blockWidth),
+                { col, height } = this.getBestFitColumn(heights, blockWidth),
                 newHeight = height + blocks[key].height;
             blocks[key].left = this.containerWidth * col / this.columns;
             blocks[key].top = height;
