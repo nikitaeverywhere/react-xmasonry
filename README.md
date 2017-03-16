@@ -11,7 +11,7 @@ Responsive minimalistic and featured __native__ masonry layout for React JS.
 <ul>
     <li>React JS native masonry layout implementation with no dependencies.</li>
     <li>Minimalistic design and simple use case.</li>
-    <li>Ability to control blocks width (in columns) and column width.</li>
+    <li>Ability to control blocks width (in columns) and columns width.</li>
     <li>Responsive, mobile-friendly approach (so there is no "fixed block width" option).</li>
     <li>Fully customizable: use CSS animations and transitions you wish (use <i>.xmasonry</i> and <i>.xblock</i> selectors).</li>
 </ul>
@@ -97,8 +97,8 @@ There are several properties you can assign to `XMasonry` and `XBlock` component
 | `center` | `true` | A `boolean` value determining whether nested `<XBlock>`s should be centered if there are empty columns left |
 | `responsive` | `true` | A `boolean` value determining whether the layout should be responsive to window size changes |
 | `targetBlockWidth` | `300` | A `number` which determines the "target" width in pixels of the nested `<XBlock>`s. The layout takes all available space, and determines the number of columns using this value. For example, if container has `600` px of available width and we specify `targetBlockWidth={200}`, we will get exactly `3` columns of `200` px width. And it will still be `3` columns if there is `660` pixels available, this time with each column taking `220` px. |
-| `updateOnAnimationEnd` | `true` | When animating grid with CSS animations, this will trigger layout to update after animation ends on `.xblock` block. |
-| `updateOnImagesLoad` | `true` | When layout contains images, it takes a little while until images are loaded. This causes incorrect blocks heights calculations at the beginning. This option allows to auto-update grid sizes when images complete loading. |
+| `updateOnAnimationEnd` | auto | A `boolean` value determining whether grid needs to be updated when the CSS animation on `.xblock` ends. It may be useful to set this to `true` only when content changes during the animation. Default `auto` means that no update will be triggered on animation end if there is no loading images detected (default). |
+| `updateOnImagesLoad` | `true` | A `boolean` value determining whether the layout should be updated when images finish loading. It normally takes a little while until images are loaded, and this causes incorrect blocks heights calculations at the beginning. This option allows to auto-update grid sizes when images complete loading. If layout contains no images, no handlers will be assigned. |
 
 ### `<XBlock>` Component Properties
 
@@ -135,11 +135,11 @@ Technically, XMasonry component renders 3 times:
 
 This stages take around 3-4 frames to appear on the screen (~90ms).
 
-Each time when elements changes in masonry layout (images load and animation end), the XMasonry 
-update method is triggered. It goes through rendered elements this time and looks for any size
-changes there. Thanks to React, all the DOM updates are optimized here and this function is very
-light to call. You can trigger XMasonry `update` on your own, whenever you need to update the
-layout.
+Each time when elements change in masonry layout (images load or animation end, depending on initial
+configuration), the XMasonry `update` method is triggered. It goes through rendered elements this 
+time, and looks for any size changes there. Thanks to React, all the DOM updates are optimized here 
+and this function is very light to call. You can trigger XMasonry `update` on your own, whenever you 
+need to update the layout.
 
 Once the window size gets changed (default behavior), the "force update" technique is applied, which
 do the IR and AR phases again.

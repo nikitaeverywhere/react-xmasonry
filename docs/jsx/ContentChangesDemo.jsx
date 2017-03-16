@@ -17,7 +17,7 @@ export default class ContentChangesDemo extends React.Component {
         return <div className="demo" id="ContentChangesDemo">
             <div className="centerText">
                 <button onClick={ () => this.setState({ data: utils.generateArticles() }) }>
-                    Generate New
+                    Regenerate
                 </button>
             </div>
             <XMasonry>{ this.state.data.map((article, i) =>

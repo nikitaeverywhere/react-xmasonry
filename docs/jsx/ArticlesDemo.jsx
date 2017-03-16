@@ -17,7 +17,7 @@ export default class ArticlesDemo extends React.Component {
         return <div className="demo" id="ArticlesDemo">
             <div className="centerText">
                 <button onClick={ () => this.setState({ data: utils.generateArticles() }) }>
-                    Generate New
+                    Regenerate
                 </button>
             </div>
             <XMasonry targetBlockWidth={400}>{ this.state.data.map((article, i) =>

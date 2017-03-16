@@ -18,7 +18,7 @@ export default class XMasonry extends React.Component {
         center: true,
         responsive: true,
         targetBlockWidth: 300,
-        updateOnAnimationEnd: true,
+        updateOnAnimationEnd: undefined,
         updateOnImagesLoad: true
     };
 
@@ -216,12 +216,27 @@ export default class XMasonry extends React.Component {
     update = debounce(this.updateInternal.bind(this, true));
 
     /**
-     * @param {boolean=false} force - If passed, re-measure all children, even already measured.
+     * This flag has just an optimization purpose: it prevents layout from running updateInternal
+     * twice as external update with force flag always run componentDidUpdate method, which triggers
+     * updateInternal method as well.
+     * @see updateInternal
+     * @type {boolean}
+     */
+    externalUpdate = false;
+
+    /**
+     * @param {boolean=false} external - If passed, re-measure all children, even already measured.
      * @private
      */
-    updateInternal (force = false) {
+    updateInternal (external = false) {
+
+        // prevent from updating layout twice when force update is triggered.
+        if (this.externalUpdate) { this.externalUpdate = false; return; }
+        if (external) { this.externalUpdate = true; }
+
         if (!this.updateContainerWidth())
-            this.measureChildren(force);
+            this.measureChildren(external);
+
     }
 
     render () {

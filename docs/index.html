@@ -13,12 +13,20 @@
     <script src="lib/react-dom.js"></script>
     <script src="index.js"></script>
 </head>
-<body onload="window.init();">
+<body>
     <a href="https://github.com/zitros/react-xmasonry" target="_blank" style="position: absolute; top: 0; right: 0; border: 0; display: inline-block; z-index: 999"><img src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub"></a>
-    <h3 style="text-align: center; margin-right: 150px">
-        <a href="https://github.com/zitros/react-xmasonry" target="_blank">React-XMasonry</a>
-        Layout Demo
-    </h3>
+    <div style="text-align: center; margin-right: 150px">
+        <h3>
+            <a href="https://github.com/zitros/react-xmasonry" target="_blank">React-XMasonry</a>
+            Layout Demo
+        </h3>
+        <div>
+            <a href="http://npm.anvaka.com/#/view/2d/react-xmasonry"><img src="https://img.shields.io/badge/dependencies-none-brightgreen.svg" alt="Dependencies" class="badge"></a>
+            <a href="https://www.codacy.com/app/ZitRos/react-xmasonry?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ZitRos/react-xmasonry&amp;utm_campaign=Badge_Grade"><img src="https://api.codacy.com/project/badge/Grade/c073dc0dc2744d5b950418bf5fbcc820" alt="Codacy Badge"></a>
+            <a href="https://github.com/ZitRos/react-xmasonry/commits/master"><img src="https://img.shields.io/badge/in%20active-development-blue.svg" alt="Development Badge" class="badge"></a>
+            <a href="https://github.com/ZitRos/react-xmasonry/blob/master/LICENSE"><img src="https://img.shields.io/github/license/mashape/apistatus.svg" alt="License" class="badge"></a>
+        </div>
+    </div>
     <p style="margin-right: 150px">
         XMasonry is a simple, minimalistic and featured native masonry layout for React JS.
         No dependencies, very tiny weight of ~3kb gzipped library code. The solution is oriented
@@ -36,8 +44,9 @@
     <h1 class="demo centerText">--- Examples ---</h1>
     <div id="demoApp">
         <p style="color: orangered">
-            If you see this text, that means that your browser doesn't support latest React JS.
-            Try updating your browser or use a different one.
+            Loading...<br/>
+            If you see this text, that means that your browser doesn't support latest React JS or
+            you have network problems. Try refreshing the page or updating your browser.
         </p>
     </div>
     <div class="centerText">
@@ -58,5 +67,6 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript">window.init()</script>
 </body>
 </html>

@@ -20,24 +20,44 @@ export default class XBlock extends React.Component {
         boxSizing: `border-box`
     };
 
+    /**
+     * Reference to the div element.
+     * @type {null}
+     */
     divElement = null;
+
+    /**
+     * Identifies whether this .xblock is initialized.
+     * @type {boolean}
+     */
     placed = false;
+
+    /**
+     * Identifies whether this .xblock is in animating state.
+     * @type {boolean}
+     */
+    animating = false;
 
     componentDidUpdate () {
         if (this.placed && !this.props.parent)
             return;
         this.placed = true;
         const parent = this.props.parent;
-        if (!parent.props.updateOnAnimationEnd && !parent.props.updateOnImagesLoad)
-            return;
         requestAnimationFrame(() => {
             if (!this.divElement) return;
-            if (parent.props.updateOnImagesLoad)
-                Array.from(this.divElement.querySelectorAll(`img`)).forEach(
-                    (img) => img.addEventListener(`load`, parent.update) // rest
+            let images = Array.from(this.divElement.querySelectorAll(`img`)),
+                handleImages = images.length > 0 && parent.props.updateOnImagesLoad;
+            if (handleImages) images.forEach(
+                (img) => img.addEventListener(`load`, () => !this.animating && parent.update())
+            );
+            if (parent.props.updateOnAnimationEnd !== false // undefined !== false => auto
+                    && (handleImages || parent.props.updateOnAnimationEnd)) {
+                this.divElement.addEventListener(`animationstart`, () => this.animating = true);
+                this.divElement.addEventListener(
+                    `animationend`,
+                    () => !(this.animating = false) && parent.update()
                 );
-            if (parent.props.updateOnAnimationEnd)
-                this.divElement.addEventListener(`animationend`, parent.update);
+            }
         });
     }
 
