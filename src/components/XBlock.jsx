@@ -22,7 +22,7 @@ export default class XBlock extends React.Component {
 
     /**
      * Reference to the div element.
-     * @type {null}
+     * @type {HTMLElement|null}
      */
     divElement = null;
 
