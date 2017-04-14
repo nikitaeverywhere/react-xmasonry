@@ -1,12 +1,11 @@
 # tests
-docs
+docs/
 
 # build tools
 webpack.config.babel.js
 
 # etc
-node_modules
-src
+node_modules/
 .babelrc
 .gitignore
 .idea

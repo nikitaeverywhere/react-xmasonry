@@ -6,14 +6,14 @@ import debounce from "../utils/debounce.jsx";
  */
 export default class XMasonry extends React.Component {
 
-    static propTypes = {
+    /*static propTypes = { // React.propTypes are deprecated as of React v15.5
         center: React.PropTypes.bool,
         maxColumns: React.PropTypes.number,
         responsive: React.PropTypes.bool,
         targetBlockWidth: React.PropTypes.number,
         updateOnAnimationEnd: React.PropTypes.bool,
         updateOnImagesLoad: React.PropTypes.bool
-    };
+    };*/
 
     static defaultProps = {
         center: true,

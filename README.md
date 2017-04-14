@@ -6,7 +6,7 @@
 [![npm](https://img.shields.io/npm/dm/react-xmasonry.svg)](https://www.npmjs.com/package/react-xmasonry)
 [![License](https://img.shields.io/github/license/mashape/apistatus.svg)](LICENSE)
 
-Responsive minimalistic and featured __native__ masonry layout for React JS.
+Responsive, minimalistic and featured __native__ masonry layout for React JS.
 
 <h4>General Features</h4>
 <ul>
@@ -26,13 +26,13 @@ Installation
 ------------
 
 ```bash
-npm install react-xmasonry --save
+npm install react-xmasonry --save-dev
 ```
 
 Or, if you use the old-style `<script>` tag, try the next:
 
 ```js
-<script type="text/javascript" src="https://raw.githubusercontent.com/ZitRos/react-xmasonry/master/dist/index.js"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/ZitRos/react-xmasonry/master/dist/index.js"></script>
 ```
 
 Example of Usage
@@ -138,7 +138,7 @@ Technically, XMasonry component renders 3 times:
 2. "Invisible Render" (IR), when XMasonry renders `visibility: hidden` blocks width computed column widths to measure their heights;
 3. And finally "Actual Render" (AR), when it renders elements with computed dimensions and positions. The `.xblock` style gets applied here only, so you can put animations on it.
 
-This stages take around 3-4 frames to appear on the screen (~90ms).
+This stages take around 3-4 frames to appear on the screen (~60ms).
 
 Each time when elements change in masonry layout (images load or animation end, depending on initial
 configuration), the XMasonry `update` method is triggered. It goes through rendered elements this 
