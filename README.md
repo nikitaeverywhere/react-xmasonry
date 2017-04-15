@@ -32,7 +32,7 @@ npm install react-xmasonry --save-dev
 Or, if you use the old-style `<script>` tag, try the next:
 
 ```js
-<script type="text/javascript" src="https://cdn.rawgit.com/ZitRos/react-xmasonry/master/dist/index.js"></script>
+<script type="text/javascript" src="https://unpkg.com/react-xmasonry/dist/index.js"></script>
 ```
 
 Example of Usage
