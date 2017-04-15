@@ -30,9 +30,9 @@ export function generateArticles () {
     return Array.from({ length: 7 + Math.floor(Math.random() * 5) },
         () => ({
             id: ++globalID,
-            title: getRandomText(1),
+            title: getRandomText(1).slice(0, 50),
             text: `${ getRandomText() }.`,
-            cover: `img/wallpaper.jpg`,
+            cover: `https://source.unsplash.com/random/1600x900.${ Math.random().toString().slice(2) }`,
             cardWidth: Math.random() > 0.8 ? 2 : 1
         })
     );

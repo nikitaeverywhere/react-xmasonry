@@ -33,7 +33,7 @@ export default class ContentChangesDemo extends React.Component {
             <XMasonry ref={ (x) => this.xMasonry = x }>{ this.state.data.map((article, i) =>
                 <XBlock key={ article.id } width={ article.cardWidth }>
                     <div className="card" style={{position: "relative"}}>
-                        <img src={ article.cover + `?dummy=${ Math.random() }` } alt="image"/>
+                        <img src={ article.cover } alt="image"/>
                         <div className="body">
                             <h3>{ article.title }</h3>
                             <p>
