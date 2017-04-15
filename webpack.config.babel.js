@@ -6,7 +6,7 @@ export default {
         "./docs/index": "./docs/index.jsx"
     },
     output: {
-        path: "./",
+        path: `${ __dirname }`,
         filename: "[name].js",
         library: "react-xmasonry",
         libraryTarget: "umd"

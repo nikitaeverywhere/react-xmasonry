@@ -43,7 +43,7 @@ export function getRandomCard (id) {
         id: id,
         header: "This is a dummy card",
         body: getRandomText(),
-        width: Math.floor(1 + Math.random() * 1.5),
+        width: Math.random() > 0.8 ? 2 : 1,
         color: getRandomColor()
     };
 }

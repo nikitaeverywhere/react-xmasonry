@@ -5,9 +5,9 @@ import React from "react";
  */
 export default class XBlock extends React.Component {
 
-    /*static propTypes = { // React.propTypes are deprecated as of React v15.5
-        width: React.PropTypes.number
-    };*/
+    // static propTypes = { // React.propTypes are deprecated as of React v15.5
+    //     width: React.PropTypes.number
+    // };
 
     static defaultProps = {
         width: 1,
@@ -32,31 +32,27 @@ export default class XBlock extends React.Component {
     placed = false;
 
     componentDidUpdate () {
-        if (this.placed || !this.props.parent)
+        if (this.placed || !this.props.parent || this.props["data-xkey"])
             return;
         this.placed = true;
         const parent = this.props.parent;
         requestAnimationFrame(() => { if (!this.divElement) return;
             let images = Array.from(this.divElement.querySelectorAll(`img`)),
                 handleImages = images.length > 0 && parent.props.updateOnImagesLoad;
-            if (handleImages) images.forEach((img) => !img.complete
-                && img.addEventListener(`load`, () => !parent.updateLock && parent.update())
+            if (handleImages) images.forEach(
+                (img) => !img.complete && img.addEventListener(`load`, parent.update)
             );
-            if (parent.props.updateOnAnimationEnd !== false // undefined !== false => auto
-                    && (handleImages || parent.props.updateOnAnimationEnd)) {
-                this.divElement.addEventListener(`animationstart`, () => parent.updateLock = true);
-                this.divElement.addEventListener(`animationend`, () => {
-                    parent.updateLock = false;
-                    parent.update();
-                });
-            }
+            if (this.props.height !== this.divElement.clientHeight)
+                parent.update(); // useful when f.e. image was loaded in between renders
         });
     }
 
     render () {
-        let { width, measured, parent, style, ...rest } = this.props;
-        return <div { ...rest } style={ { ...style, ...XBlock.defaultStyle } }
-                    className={ this.props.measured ? `xblock` : `` }
+        let { width, height, measured, parent, style, ...rest } = this.props;
+        return <div data-width={ width }
+                    { ...rest }
+                    style={ { ...style, ...XBlock.defaultStyle } }
+                    className={ measured ? `xblock` : `` }
                     ref = { (x) => this.divElement = x }>
             { this.props.children }
         </div>;

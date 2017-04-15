@@ -6,21 +6,21 @@ import debounce from "../utils/debounce.jsx";
  */
 export default class XMasonry extends React.Component {
 
-    /*static propTypes = { // React.propTypes are deprecated as of React v15.5
-        center: React.PropTypes.bool,
-        maxColumns: React.PropTypes.number,
-        responsive: React.PropTypes.bool,
-        targetBlockWidth: React.PropTypes.number,
-        updateOnAnimationEnd: React.PropTypes.bool,
-        updateOnImagesLoad: React.PropTypes.bool
-    };*/
+    // static propTypes = { // React.propTypes are deprecated as of React v15.5
+    //     center: React.PropTypes.bool,
+    //     maxColumns: React.PropTypes.number,
+    //     responsive: React.PropTypes.bool,
+    //     targetBlockWidth: React.PropTypes.number,
+    //     updateOnFontLoad: React.PropTypes.bool,
+    //     updateOnImagesLoad: React.PropTypes.bool
+    // };
 
     static defaultProps = {
         center: true,
         maxColumns: Infinity,
         responsive: true,
         targetBlockWidth: 300,
-        updateOnAnimationEnd: undefined,
+        updateOnFontLoad: true,
         updateOnImagesLoad: true
     };
 
@@ -49,6 +49,10 @@ export default class XMasonry extends React.Component {
         containerWidth: 0
     };
 
+    // These properties are just a sync representation of state properties.
+    columns = this.state.columns;
+    blocks = this.state.blocks;
+
     /**
      * XMasonry layout container reference.
      * @type {HTMLElement}
@@ -74,8 +78,8 @@ export default class XMasonry extends React.Component {
      * This property assigns the fixed height to XMasonry container. The purpose of this is to
      * prevent masonry layout from updating infinitely. For example, when the elements get measured
      * and placed first time, the scroll bar may appear. Because of the width change XMasonry will
-     * go to recalculate sizes once more, appearing at the state 0 again because elements to
-     * calculate get detached from the DOM. This creates an infinite loop. The solution for this is
+     * go to recalculate sizes once again, appearing at the initial state again because elements to
+     * calculate got detached from the DOM. This creates an infinite loop. The solution for this is
      * to fix the container's previously calculated height until all the elements will be measured.
      * @type {number}
      * @private
@@ -89,13 +93,25 @@ export default class XMasonry extends React.Component {
      * @readonly
      */
     containerWidth = this.state.containerWidth;
-    columns = this.state.columns;
+
+    /**
+     * Update XMasonry layout. It is safe to trigger this function multiple times, size updates are
+     * optimized.
+     */
+    update = this.updateInternal.bind(this);
 
     constructor (props) {
         super(props);
         if (this.props.responsive)
             window.addEventListener("resize", this.debouncedResize);
+        if (this.props.updateOnFontLoad && document.fonts && document.fonts.addEventListener)
+            document.fonts.addEventListener("loadingdone", this.update);
         this.updateContainerWidth();
+    }
+
+    updateInternal () {
+        if (!this.updateContainerWidth())
+            this.measureChildren();
     }
 
     componentDidMount() {
@@ -106,9 +122,12 @@ export default class XMasonry extends React.Component {
     componentWillUnmount () {
         this.mounted = false;
         window.removeEventListener("resize", this.debouncedResize);
+        if (this.props.updateOnFontLoad && document.fonts && document.fonts.addEventListener)
+            document.fonts.removeEventListener("loadingdone", this.update);
     }
 
     componentWillReceiveProps (newProps) {
+        // Other conditions are already covered, except of removing children without adding new ones
         if (newProps.children.length < this.props.children.length) {
             let newKeys = new Set(),
                 deleted = {};
@@ -141,31 +160,37 @@ export default class XMasonry extends React.Component {
      */
     updateContainerWidth () {
         if (!this.mounted) return false;
-        let newWidth = this.container.getBoundingClientRect().width;
+        let newWidth = this.container.clientWidth;
         if (newWidth === this.containerWidth)
             return false;
         this.setState({
             columns: this.columns = this.getColumnsNumber(newWidth),
             containerWidth: this.containerWidth = newWidth,
-            blocks: {}
+            blocks: this.blocks = {}
         });
         return true;
     }
 
     /**
-     * Measure non-measured blocks.
-     * @param {boolean=false} force - If passed, re-measure all children, even already measured.
+     * Measure non-measured blocks and update measured.
      * @private
      */
-    measureChildren (force = false) {
-        let blocks = {};
+    measureChildren () {
+        let blocks = {},
+            update = false;
         for (let i = 0; i < this.container.children.length; i++) {
-            let child = this.container.children[i];
-            if (!child.hasAttribute("data-xkey") && !force) continue;
-            let { height } = child.getBoundingClientRect();
-            blocks[child.getAttribute("data-key")] = { height: Math.ceil(height) };
+            let child = this.container.children[i],
+                hasXKey = child.hasAttribute("data-xkey"),
+                key = child.getAttribute("data-key");
+            if (!hasXKey && (this.blocks[key] || {}).height === child.clientHeight)
+                continue;
+            blocks[key] = {
+                height: child.clientHeight
+            };
+            if (!update) update = true;
         }
-        if (Object.keys(blocks).length > 0) this.recalculatePositions(blocks);
+        // console.log(`Measure children, update=${ update }`);
+        if (update) this.recalculatePositions(blocks);
     }
 
     /**
@@ -178,15 +203,15 @@ export default class XMasonry extends React.Component {
             heights = Array.from({ length: this.columns }, () => 0);
         if (deletedBlocks) {
             blocks = {};
-            for (let key in this.state.blocks)
-                if (this.state.blocks.hasOwnProperty(key) && !deletedBlocks.hasOwnProperty(key))
-                    blocks[key] = this.state.blocks[key];
+            for (let key in this.blocks)
+                if (this.blocks.hasOwnProperty(key) && !deletedBlocks.hasOwnProperty(key))
+                    blocks[key] = this.blocks[key];
             for (let key in newBlocks)
                 if (newBlocks.hasOwnProperty(key) && !deletedBlocks.hasOwnProperty(key))
                     blocks[key] = newBlocks[key];
         } else {
             blocks = {
-                ...this.state.blocks,
+                ...this.blocks,
                 ...newBlocks
             }
         }
@@ -209,57 +234,22 @@ export default class XMasonry extends React.Component {
             for (let key in blocks)
                 if (blocks.hasOwnProperty(key)) blocks[key].left += leftMargin;
         }
-        this.setState({ blocks, containerHeight: Math.max.apply(null, heights) });
-    }
-
-    /**
-     * Update nested `XBlock`s sizes and positions. It is safe to trigger this function multiple
-     * times, the size update is optimized.
-     */
-    update = debounce(() => !this.updateLock && this.updateInternal(true));
-
-    /**
-     * Update lock is used to prevent updates during animation play on xblock.
-     * @see XBlock
-     * @type {boolean}
-     */
-    updateLock = false;
-
-    /**
-     * This flag has just an optimization purpose: it prevents layout from running updateInternal
-     * twice as external update with force flag always run componentDidUpdate method, which triggers
-     * updateInternal method as well.
-     * @see updateInternal
-     * @type {boolean}
-     */
-    externalUpdate = false;
-
-    /**
-     * @param {boolean=false} external - If passed, re-measure all children, even already measured.
-     * @private
-     */
-    updateInternal (external = false) {
-
-        // prevent from updating layout twice when force update is triggered
-        if (this.externalUpdate) { this.externalUpdate = false; return; }
-        if (external) { this.externalUpdate = true; }
-
-        if (!this.updateContainerWidth())
-            this.measureChildren(external);
-
+        this.setState({
+            blocks: this.blocks = blocks,
+            containerHeight: Math.max.apply(null, heights)
+        });
     }
 
     render () {
         let toMeasure = 0;
-        const elements = this.containerWidth === 0 ? [] // wait for next render until
+        const elements = this.containerWidth === 0 ? []
             : Array.prototype.slice.call(this.props.children).map((element) => {
-                let measured = this.state.blocks[element.key], // || undefined
+                let measured = this.blocks[element.key], // || undefined
                     width = Math.min(element.props.width, this.columns);
                 if (!measured) ++toMeasure;
                 return measured
                     ? React.cloneElement(element, {
                         "data-key": element.key,
-                        "data-width": width,
                         "style": {
                             width: Math.floor(width * this.containerWidth / this.columns),
                             // height: measured.height,
@@ -268,25 +258,27 @@ export default class XMasonry extends React.Component {
                         },
                         "measured": true,
                         "width": width,
+                        "height": measured.height,
                         "parent": this
                     })
                     : React.cloneElement(element, {
                         "data-key": element.key,
-                        "data-width": width,
                         "data-xkey": element.key,
                         "style": {
                             width: Math.floor(width * this.containerWidth / this.columns),
                             visibility: "hidden"
                         },
                         "width": width,
+                        "height": 0,
                         "parent": this
                     });
-        });
+            });
         let actualHeight = elements.length - toMeasure > 0 || elements.length === 0
             ? this.fixedHeight = this.state.containerHeight
             : this.fixedHeight;
-        const { center, maxColumns, responsive, targetBlockWidth, updateOnAnimationEnd,
-            updateOnImagesLoad, className, style, ...restProps } = this.props;
+        // console.log(`Render: measured=${ elements.length - toMeasure }, not=${ toMeasure }`);
+        const { center, maxColumns, responsive, targetBlockWidth, updateOnImagesLoad,
+            updateOnFontLoad, className, style, ...restProps } = this.props;
         return <div className={className ? `xmasonry ${className}` : `xmasonry`}
                     style={ {
                         ...XMasonry.containerStyle,

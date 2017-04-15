@@ -7,6 +7,10 @@ import React from "react";
 import { XMasonry, XBlock } from "../../src/index.jsx"; // from "react-xmasonry"
 import * as utils from "./utils.jsx";
 
+/**
+ * In this example, we add dummy url parameter to each image, so browser won't be able to cache
+ * them, and you will see the visible result.
+ */
 export default class ContentChangesDemo extends React.Component {
 
     state = {
@@ -16,10 +20,7 @@ export default class ContentChangesDemo extends React.Component {
     xMasonry = null;
 
     componentDidMount () {
-        // to handle font changes after grid initializes, we can use modern CSS font loading API
-        if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => {
-            this.xMasonry.update();
-        });
+        // whenever you need to update XMasonry manually, call this.xMasonry.update()
     }
 
     render () {
@@ -32,7 +33,7 @@ export default class ContentChangesDemo extends React.Component {
             <XMasonry ref={ (x) => this.xMasonry = x }>{ this.state.data.map((article, i) =>
                 <XBlock key={ article.id } width={ article.cardWidth }>
                     <div className="card" style={{position: "relative"}}>
-                        <img src={ article.cover } alt="image"/>
+                        <img src={ article.cover + `?dummy=${ Math.random() }` } alt="image"/>
                         <div className="body">
                             <h3>{ article.title }</h3>
                             <p>

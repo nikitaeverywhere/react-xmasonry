@@ -102,7 +102,7 @@ There are several properties you can assign to `XMasonry` and `XBlock` component
 | `maxColumns` | `Infinity` | A `number` identifying the maximum columns number. |
 | `responsive` | `true` | A `boolean` value determining whether the layout should be responsive to window size changes. |
 | `targetBlockWidth` | `300` | A `number` which determines the "target" width in pixels of the nested `<XBlock>`s. The layout takes all available space, and determines the number of columns using this value. For example, if container has `600` px of available width and we specify `targetBlockWidth={200}`, we will get exactly `3` columns of `200` px width. It will still be `3` columns if there is `660` pixels available, this time with each column taking `220` px. The simplified expression for number of columns is the following: `Math.max(1, Math.round(containerWidth / targetBlockWidth))`. |
-| `updateOnAnimationEnd` | auto | A `boolean` value determining whether grid needs to be updated when the CSS animation on `.xblock` ends. It may be useful to set this to `true` only when content changes during the animation. Default `auto` means that no updates will be triggered on animation end if there is no loading images detected (default). |
+| `updateOnFontLoad` | `true` | A `boolean` value determining whether the layout should be updated when fonts are loaded. |
 | `updateOnImagesLoad` | `true` | A `boolean` value determining whether the layout should be updated when images finish loading. It normally takes a little while until images are loaded, and this causes incorrect blocks heights calculations at the beginning. This option allows to auto-update grid sizes when images complete loading. If layout contains no images, no handlers will be assigned. |
 
 ### `<XBlock>` Component Properties
@@ -128,7 +128,13 @@ Note that all the listed properties of `<XMasonry>` component are **read-only**.
 |---|---|---|
 | `columns` | `number` | The number of currently rendered columns. |
 | `container` | `HTMLElement` | The `<div>` block containing layout. |
-| `update` | `function` | Trigger this function to update nested `XBlock`s sizes and positions. It is **safe to trigger this function multiple times**, the size update is optimized. |
+| `update` | `function` | Trigger this function to update nested `XBlock`s sizes and positions. It is **safe to trigger this function multiple times**, updates are optimized. Technically, this function will check if any of containers changed its size and re-render XMasonry only if size was changed. |
+
+By default, XMasonry sniff and automatically update on the next events:
+1. Window size changes, see `responsive` property.
+2. Font load events, see ``updateOnFontLoad` property.
+3. Image load events, see `updateOnImagesLoad` property.
+4. Children changes like adding, replacing or deleting children.
 
 ### XMasonry Under the Hood
 
