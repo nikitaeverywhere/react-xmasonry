@@ -41,8 +41,8 @@
     margin: 7px;
     padding: 5px;
     border-radius: 3px;
+    background-color: white;
     box-shadow: 0 1px 3px darkgray;
-
 }
 
 #ArticlesDemo .article .title {
