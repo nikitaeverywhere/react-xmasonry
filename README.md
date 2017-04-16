@@ -35,6 +35,11 @@ Or, if you use the old-style `<script>` tag, try the next:
 <script type="text/javascript" src="https://unpkg.com/react-xmasonry/dist/index.js"></script>
 ```
 
+Having trouble installing [react-xmasonry](https://www.npmjs.com/package/react-xmasonry)? 
+Check [this issue](https://github.com/ZitRos/react-xmasonry/issues/1) or 
+[open](https://github.com/ZitRos/react-xmasonry/issues) a new one if you still
+struggling.
+
 Example of Usage
 ----------------
 
