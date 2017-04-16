@@ -181,8 +181,10 @@ export default class XMasonry extends React.Component {
         for (let i = 0; i < this.container.children.length; i++) {
             let child = this.container.children[i],
                 hasXKey = child.hasAttribute("data-xkey"),
-                key = child.getAttribute("data-key");
-            if (!hasXKey && (this.blocks[key] || {}).height === child.clientHeight)
+                key = child.getAttribute("data-key"),
+                width = +child.getAttribute("data-width");
+            if (!hasXKey && (this.blocks[key] || {}).height === child.clientHeight
+                && (this.blocks[key] || {}).width === width)
                 continue;
             blocks[key] = {
                 height: child.clientHeight
@@ -225,6 +227,7 @@ export default class XMasonry extends React.Component {
                 newHeight = height + blocks[key].height;
             blocks[key].left = this.containerWidth * col / this.columns;
             blocks[key].top = height;
+            blocks[key].width = Math.min(blockWidth, this.columns);
             for (let i = 0; i < blockWidth; ++i) heights[col + i] = newHeight;
         }
         if (this.props.center && heights[heights.length - 1] === 0) {
