@@ -48,8 +48,11 @@ export default class XBlock extends React.Component {
     }
 
     render () {
-        let { width, height, measured, parent, style, ...rest } = this.props;
-        return <div data-width={ width }
+        const { width, height, measured, parent, style, ...rest } = this.props,
+              maxColumns = this.props.parent.columns,
+              columns = Math.min(width || 1, maxColumns);
+        style.width = Math.floor(columns * this.props.parent.containerWidth / maxColumns);
+        return <div data-width={ columns }
                     { ...rest }
                     style={ { ...style, ...XBlock.defaultStyle } }
                     className={ measured ? `xblock` : `` }

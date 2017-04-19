@@ -61,13 +61,6 @@ export default class XMasonry extends React.Component {
     container = null;
 
     /**
-     * Indicates if the component is mounted.
-     * @type {boolean}
-     * @private
-     */
-    mounted = false;
-
-    /**
      * De-bouncing properties used to prevent size recalculations being called very often.
      * @type {function}
      * @private
@@ -115,12 +108,10 @@ export default class XMasonry extends React.Component {
     }
 
     componentDidMount() {
-        this.mounted = true;
         this.updateInternal();
     }
 
     componentWillUnmount () {
-        this.mounted = false;
         window.removeEventListener("resize", this.debouncedResize);
         if (this.props.updateOnFontLoad && document.fonts && document.fonts.addEventListener)
             document.fonts.removeEventListener("loadingdone", this.update);
@@ -159,7 +150,7 @@ export default class XMasonry extends React.Component {
      * @returns {boolean} - Width updated.
      */
     updateContainerWidth () {
-        if (!this.mounted) return false;
+        if (!this.container) return false;
         let newWidth = this.container.clientWidth;
         if (newWidth === this.containerWidth)
             return false;
@@ -176,6 +167,7 @@ export default class XMasonry extends React.Component {
      * @private
      */
     measureChildren () {
+        if (!this.container) return;
         let blocks = {},
             update = false;
         for (let i = 0; i < this.container.children.length; i++) {
@@ -191,7 +183,7 @@ export default class XMasonry extends React.Component {
             };
             if (!update) update = true;
         }
-        // console.log(`Measure children, update=${ update }`);
+        //console.log(`Measure children, update=${ update }`);
         if (update) this.recalculatePositions(blocks);
     }
 
@@ -247,20 +239,16 @@ export default class XMasonry extends React.Component {
         let toMeasure = 0;
         const elements = this.containerWidth === 0 ? []
             : Array.prototype.slice.call(this.props.children).map((element) => {
-                let measured = this.blocks[element.key], // || undefined
-                    width = Math.min(element.props.width, this.columns);
+                let measured = this.blocks[element.key]; // || undefined
                 if (!measured) ++toMeasure;
                 return measured
                     ? React.cloneElement(element, {
                         "data-key": element.key,
                         "style": {
-                            width: Math.floor(width * this.containerWidth / this.columns),
-                            // height: measured.height,
                             left: Math.floor(measured.left),
                             top: measured.top
                         },
                         "measured": true,
-                        "width": width,
                         "height": measured.height,
                         "parent": this
                     })
@@ -268,10 +256,8 @@ export default class XMasonry extends React.Component {
                         "data-key": element.key,
                         "data-xkey": element.key,
                         "style": {
-                            width: Math.floor(width * this.containerWidth / this.columns),
                             visibility: "hidden"
                         },
-                        "width": width,
                         "height": 0,
                         "parent": this
                     });
@@ -279,7 +265,7 @@ export default class XMasonry extends React.Component {
         let actualHeight = elements.length - toMeasure > 0 || elements.length === 0
             ? this.fixedHeight = this.state.containerHeight
             : this.fixedHeight;
-        // console.log(`Render: measured=${ elements.length - toMeasure }, not=${ toMeasure }`);
+        //console.log(`Render: measured=${ elements.length - toMeasure }, not=${ toMeasure }, blocks`, JSON.parse(JSON.stringify(this.blocks)));
         const { center, maxColumns, responsive, targetBlockWidth, updateOnImagesLoad,
             updateOnFontLoad, className, style, ...restProps } = this.props;
         return <div className={className ? `xmasonry ${className}` : `xmasonry`}
