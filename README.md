@@ -29,7 +29,7 @@ Installation
 npm install react-xmasonry --save-dev
 ```
 
-Or, if you use the old-style `<script>` tag, try the next:
+Or, if you use the old-style `<script>` tag or need UMD module for demos, use the next:
 
 ```js
 <script type="text/javascript" src="https://unpkg.com/react-xmasonry/dist/index.js"></script>
