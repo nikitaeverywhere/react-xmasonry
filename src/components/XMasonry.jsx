@@ -123,10 +123,11 @@ export default class XMasonry extends React.Component {
             let newKeys = new Set(),
                 deleted = {};
             for (let i = 0; i < newProps.children.length; i++)
-                newKeys.add(newProps.children[i].key);
+                newKeys.add(newProps.children[i].key === null ? i : newProps.children[i].key);
             for (let i = 0; i < this.props.children.length; i++) {
-                if (!newKeys.has(this.props.children[i].key))
-                    deleted[this.props.children[i].key] = {};
+                const key = this.props.children[i].key === null ? i : this.props.children[i].key;
+                if (!newKeys.has(key))
+                    deleted[key] = {};
             }
             this.recalculatePositions(null, deleted);
         }
@@ -237,13 +238,15 @@ export default class XMasonry extends React.Component {
 
     render () {
         let toMeasure = 0;
-        const elements = this.containerWidth === 0 ? []
-            : Array.prototype.slice.call(this.props.children).map((element) => {
-                let measured = this.blocks[element.key]; // || undefined
+        const elements = this.containerWidth === 0 ? [] :
+            Array.prototype.slice.call(React.isValidElement(this.props.children)
+            ? [this.props.children] : this.props.children).map((element, i) => {
+                const key = element.key === null ? i : element.key;
+                const measured = this.blocks[key]; // || undefined
                 if (!measured) ++toMeasure;
                 return measured
                     ? React.cloneElement(element, {
-                        "data-key": element.key,
+                        "data-key": key,
                         "style": {
                             left: Math.floor(measured.left),
                             top: measured.top
@@ -253,8 +256,8 @@ export default class XMasonry extends React.Component {
                         "parent": this
                     })
                     : React.cloneElement(element, {
-                        "data-key": element.key,
-                        "data-xkey": element.key,
+                        "data-key": key,
+                        "data-xkey": key,
                         "style": {
                             visibility: "hidden"
                         },

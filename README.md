@@ -49,23 +49,20 @@ Import `XMasonry` and `XBlock` components:
 import { XMasonry, XBlock } from "react-xmasonry";
 ```
 
-The simplest layout using JSX and a little styling looks as following:
+The simplest layout using JSX and a little styling may look as following:
 
 ```jsx
-<XMasonry>
-    <XBlock>
-        <div className="card">
-            <h1>Card One</h1>
-            <p>Any text</p>
-        </div>
-    </XBlock>
-    <XBlock width="2">
-        <div className="card">
-            <h1>Card Two</h1>
-            <p>Any text</p>
-        </div>
-    </XBlock>
-</XMasonry>
+render () {
+    const data = [1, 2, 3, 4, 5];
+    return <XMasonry>{ data.map(number =>
+        <XBlock key={ number }>
+            <div className="card">
+                <h1>Card #{ number }</h1>
+                <p>Any text!</p>
+            </div>
+        </XBlock>
+    )}</XMasonry>
+}
 ```
 
 There is no more JavaScript than positioning and sizing! Use any CSS to make animations and 
