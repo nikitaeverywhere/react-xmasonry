@@ -40,8 +40,8 @@ Check [this issue](https://github.com/ZitRos/react-xmasonry/issues/1) or
 [open](https://github.com/ZitRos/react-xmasonry/issues) a new one if you still
 struggling.
 
-Example of Usage
-----------------
+Usage
+-----
 
 Import `XMasonry` and `XBlock` components:
 
@@ -89,7 +89,8 @@ transitions you like (`.xmasonry` and `.xblock` selectors), for example:
 }
 ```
 
-And all the further magic XMasonry will do for you. See the [example page source here](https://github.com/ZitRos/react-xmasonry/blob/master/docs/jsx/CardsDemo.jsx).
+And all the further magic XMasonry will do for you. See the [demos page](https://zitros.github.io/react-xmasonry)
+sources [here](https://github.com/ZitRos/react-xmasonry/blob/master/docs/jsx/CardsDemo.jsx).
 
 Configuring Components
 ----------------------
