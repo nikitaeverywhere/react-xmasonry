@@ -7,7 +7,7 @@
 #ArticlesDemo .xmasonry .xblock {
     animation: comeIn ease 0.5s;
     animation-iteration-count: 1;
-    transition: all .3s ease;
+    transition: left .3s ease, top .3s ease;
 }
 
 /****** These styles fix the cover ratio ********/
