@@ -164,7 +164,7 @@ export default class XMasonry extends React.Component {
     }
 
     /**
-     * Measure non-measured blocks and update measured.
+     * Measure non-measured blocks and update measured ones.
      * @private
      */
     measureChildren () {
@@ -247,6 +247,7 @@ export default class XMasonry extends React.Component {
                 return measured
                     ? React.cloneElement(element, {
                         "data-key": key,
+                        "key": key,
                         "style": {
                             left: Math.floor(measured.left),
                             top: measured.top
@@ -258,6 +259,7 @@ export default class XMasonry extends React.Component {
                     : React.cloneElement(element, {
                         "data-key": key,
                         "data-xkey": key,
+                        "key": key,
                         "style": {
                             visibility: "hidden"
                         },
