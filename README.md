@@ -20,7 +20,7 @@ Responsive, minimalistic and featured __native__ masonry layout for React JS.
 ## [Demo](https://zitros.github.io/react-xmasonry)
 
 Check the XMasonry [demos page](https://zitros.github.io/react-xmasonry). You can also see the
-[notes application](https://zitros.github.io/easy-local-notes/) made with `react-xmasonry`.
+[notes application](https://zitros.github.io/easy-local-notes/) made with `react-xmasonry`. Play with [this code pen](https://codepen.io/ZitRos/pen/GmrLQB) to see what XMasonry can.
 
 Installation
 ------------
