@@ -138,7 +138,7 @@ Note that all the listed properties of `<XMasonry>` component are **read-only**.
 
 By default, XMasonry sniff and automatically update on the next events:
 1. Window size changes, see `responsive` property.
-2. Font load events, see ``updateOnFontLoad` property.
+2. Font load events, see `updateOnFontLoad` property.
 3. Image load events, see `updateOnImagesLoad` property.
 4. Children changes like adding, replacing or deleting children.
 
@@ -160,3 +160,8 @@ need to update the layout.
 
 Once the window size gets changed (default behavior), the "force update" technique is applied, which
 do the IR and AR phases again.
+
+Licence
+-------
+
+[MIT](LICENSE) © [Nikita Savchenko](https://nikita.tk)
