@@ -163,18 +163,22 @@ export default class XMasonry extends React.Component {
         } else if (this.smartUpdate)
             return;
         this.smartUpdate = setTimeout(() => {
-            this.smartUpdate = 0;
-            this.updateInternal();
-            if (typeof document.hidden !== "undefined" && document.hidden) {
+            const hidden = typeof document.hidden !== "undefined" && document.hidden;
+            if (hidden) {
                 let listener = document.addEventListener("visibilitychange", () => {
                     if (document.hidden)
                         return;
                     document.removeEventListener("visibilitychange", listener);
                     this.runSmartUpdate(gap * 2);
                 }, false);
+            }
+            this.smartUpdate = 0;
+            if (this.updateInternal()) { // if Smart Update detects any changes
+                this.runSmartUpdate(); // re-run smart update
                 return;
             }
-            this.runSmartUpdate(gap * 2);
+            if (!hidden)
+                this.runSmartUpdate(gap * 2);
         }, gap);
     }
 
