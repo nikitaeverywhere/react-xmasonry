@@ -23,6 +23,7 @@ export default class XMasonry extends React.Component {
         maxColumns: Infinity,
         responsive: true,
         smartUpdate: true,
+        smartUpdateCeil: Infinity,
         targetBlockWidth: 300,
         updateOnFontLoad: true,
         updateOnImagesLoad: true
@@ -179,7 +180,7 @@ export default class XMasonry extends React.Component {
             }
             if (!hidden)
                 this.runSmartUpdate(gap * 2);
-        }, gap);
+        }, Math.min(gap, this.props.smartUpdateCeil));
     }
 
     /**
@@ -321,7 +322,7 @@ export default class XMasonry extends React.Component {
             : this.fixedHeight;
         // console.log(`Render: measured=${ elements.length - toMeasure }, not=${ toMeasure
         // }, blocks`, JSON.parse(JSON.stringify(this.blocks)));
-        const { center, maxColumns, responsive, smartUpdate, targetBlockWidth,
+        const { center, maxColumns, responsive, smartUpdate, smartUpdateCeil, targetBlockWidth,
             updateOnImagesLoad, updateOnFontLoad, className, style, ...restProps } = this.props;
         return <div className={className ? `xmasonry ${className}` : `xmasonry`}
                     style={ {
