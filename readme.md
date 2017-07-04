@@ -1,4 +1,4 @@
-# react-xmasonry
+# [react-xmasonry](npmjs.org/package/react-xmasonry)
 
 [![npm](https://img.shields.io/npm/v/react-xmasonry.svg)](https://www.npmjs.com/package/react-xmasonry)
 [![Dependencies](https://img.shields.io/badge/dependencies-none-brightgreen.svg)](http://npm.anvaka.com/#/view/2d/react-xmasonry)
@@ -9,21 +9,23 @@
 [![File Size (GZip)](http://img.badgesize.io/ZitRos/react-xmasonry/master/dist/index.js?compression=gzip)](https://github.com/ZitRos/react-xmasonry/blob/master/dist/index.js)
 [![GitHub](https://img.shields.io/github/stars/zitros/react-xmasonry.svg?style=social&label=Star)](https://github.com/ZitRos/react-xmasonry)
 
-Responsive, minimalistic and featured __native__ masonry layout for React JS.
+Responsive, minimalistic and full-featured __native__ masonry layout (grid) for React JS.
 
-<h4>General Features</h4>
-<ul>
-    <li>React JS native masonry layout implementation with no dependencies.</li>
-    <li>Minimalistic design and simple use case.</li>
-    <li>Ability to control blocks width (in columns) and columns width.</li>
-    <li>Responsive, mobile-friendly approach (so there is no "fixed block width" option).</li>
-    <li>Fully customizable: use CSS animations and transitions you wish (use <i>.xmasonry</i> and <i>.xblock</i> selectors).</li>
-</ul>
+Features
+--------
 
-## [Demo](https://zitros.github.io/react-xmasonry)
++ React JS native masonry layout implementation with no dependencies.
++ Minimalistic design and simple use case.
++ Ability to control blocks width (in columns) and columns targeting width.
++ Responsive, mobile-friendly approach (so there is no "fixed block width" option).
++ Fully customizable: use CSS animations and transitions you wish (use `.xmasonry` and `.xblock` selectors).
+
+[Demo](https://zitros.github.io/react-xmasonry)
+-----------------------------------------------
 
 Check the XMasonry [demos page](https://zitros.github.io/react-xmasonry). You can also see the
-[notes application](https://zitros.github.io/easy-local-notes/) made with `react-xmasonry`. Play with [this code pen](https://codepen.io/ZitRos/pen/GmrLQB) to see what XMasonry can.
+[notes application](https://zitros.github.io/easy-local-notes/) made with `react-xmasonry`. 
+Play with [this code pen](https://codepen.io/ZitRos/pen/GmrLQB) to see what XMasonry can.
 
 Installation
 ------------
@@ -52,7 +54,7 @@ Import `XMasonry` and `XBlock` components:
 import { XMasonry, XBlock } from "react-xmasonry";
 ```
 
-The simplest layout using JSX and a little styling may look as following:
+The simplest layout using JSX and a little styling may look like as following:
 
 ```jsx
 render () {
@@ -107,6 +109,7 @@ There are several properties you can assign to `XMasonry` and `XBlock` component
 | `center` | `true` | A `boolean` value determining whether nested `<XBlock>`s should be centered if there are some empty columns left. |
 | `maxColumns` | `Infinity` | A `number` identifying the maximum columns number. |
 | `responsive` | `true` | A `boolean` value determining whether the layout should be responsive to window size changes. |
+| `smartUpdate` | `true` | A `boolean` value indicating whether Smart Updates are enabled. Smart Update is an XMasonry feature that performs silent checks on XMasonry XBlocks sizes and updates the layout when any size changes are detected. These checks work in the next way: when any update on XMasonry happens, Smart Update will schedule sizes check through the 100 ms (default), then, if no sizes changed, through the 200 ms, 400 ms and so on. When any change happens, this procedure repeats, starting from 100 ms check. These checks and updates are highly optimized - use it for your convenience! |
 | `targetBlockWidth` | `300` | A `number` which determines the "target" width in pixels of the nested `<XBlock>`s. The layout takes all available space, and determines the number of columns using this value. For example, if container has `600` px of available width and we specify `targetBlockWidth={200}`, we will get exactly `3` columns of `200` px width. It will still be `3` columns if there is `660` pixels available, this time with each column taking `220` px. The simplified expression for number of columns is the following: `Math.max(1, Math.round(containerWidth / targetBlockWidth))`. |
 | `updateOnFontLoad` | `true` | A `boolean` value determining whether the layout should be updated when fonts are loaded. |
 | `updateOnImagesLoad` | `true` | A `boolean` value determining whether the layout should be updated when images finish loading. It normally takes a little while until images are loaded, and this causes incorrect blocks heights calculations at the beginning. This option allows to auto-update grid sizes when images complete loading. If layout contains no images, no handlers will be assigned. |
@@ -137,10 +140,11 @@ Note that all the listed properties of `<XMasonry>` component are **read-only**.
 | `update` | `function` | Trigger this function to update nested `XBlock`s sizes and positions. It is **safe to trigger this function multiple times**, updates are optimized. Technically, this function will check if any of containers changed its size and re-render XMasonry only if size was changed. |
 
 By default, XMasonry sniff and automatically update on the next events:
-1. Window size changes, see `responsive` property.
-2. Font load events, see `updateOnFontLoad` property.
-3. Image load events, see `updateOnImagesLoad` property.
+1. Window size changes, see `responsive` prop.
+2. Font load events, see `updateOnFontLoad` prop.
+3. Image load events, see `updateOnImagesLoad` prop.
 4. Children changes like adding, replacing or deleting children.
+5. After any change in layout happens, see `smartUpdate` prop.
 
 ### XMasonry Under the Hood
 
@@ -155,8 +159,9 @@ This stages take around 3-4 frames to appear on the screen (~60ms).
 Each time when elements change in masonry layout (images load or animation end, depending on initial
 configuration), the XMasonry `update` method is triggered. It goes through rendered elements this 
 time, and looks for any size changes there. Thanks to React, all the DOM updates are optimized here 
-and this function is very light to call. You can trigger XMasonry `update` on your own, whenever you 
-need to update the layout.
+and this function is very light to call. You can manually trigger XMasonry `update` function, 
+whenever you need to update the layout. By default, after any change in layout, Smart Update will 
+be performed. Check `smartUpdate` prop description for more information.
 
 Once the window size gets changed (default behavior), the "force update" technique is applied, which
 do the IR and AR phases again.

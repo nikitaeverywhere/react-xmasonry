@@ -1,6 +1,8 @@
 import React from "react";
 import debounce from "../utils/debounce.jsx";
 
+const DEFAULT_SMART_UPDATE_GAP = 100;
+
 /**
  * @npm react-xmasonry
  */
@@ -10,6 +12,7 @@ export default class XMasonry extends React.Component {
     //     center: React.PropTypes.bool,
     //     maxColumns: React.PropTypes.number,
     //     responsive: React.PropTypes.bool,
+    //     smartUpdate: React.PropTypes.bool
     //     targetBlockWidth: React.PropTypes.number,
     //     updateOnFontLoad: React.PropTypes.bool,
     //     updateOnImagesLoad: React.PropTypes.bool
@@ -19,6 +22,7 @@ export default class XMasonry extends React.Component {
         center: true,
         maxColumns: Infinity,
         responsive: true,
+        smartUpdate: true,
         targetBlockWidth: 300,
         updateOnFontLoad: true,
         updateOnImagesLoad: true
@@ -49,7 +53,7 @@ export default class XMasonry extends React.Component {
         containerWidth: 0
     };
 
-    // These properties are just a sync representation of state properties.
+    // These properties are just a sync representation of some state properties.
     columns = this.state.columns;
     blocks = this.state.blocks;
 
@@ -93,6 +97,12 @@ export default class XMasonry extends React.Component {
      */
     update = this.updateInternal.bind(this);
 
+    /**
+     * Timeout identifier determining the next smart update run time.
+     * @type {number}
+     */
+    smartUpdate = 0;
+
     constructor (props) {
         super(props);
         if (this.props.responsive)
@@ -102,12 +112,16 @@ export default class XMasonry extends React.Component {
         this.updateContainerWidth();
     }
 
+    /**
+     * @return {boolean} - Whether the components were updated.
+     */
     updateInternal () {
         if (!this.updateContainerWidth())
-            this.measureChildren();
+            return this.measureChildren();
+        return false;
     }
 
-    componentDidMount() {
+    componentDidMount () {
         this.updateInternal();
     }
 
@@ -115,6 +129,8 @@ export default class XMasonry extends React.Component {
         window.removeEventListener("resize", this.debouncedResize);
         if (this.props.updateOnFontLoad && document.fonts && document.fonts.addEventListener)
             document.fonts.removeEventListener("loadingdone", this.update);
+        if (this.smartUpdate)
+            clearTimeout(this.smartUpdate);
     }
 
     componentWillReceiveProps (newProps) {
@@ -133,8 +149,33 @@ export default class XMasonry extends React.Component {
         }
     }
 
-    componentDidUpdate() {
-        this.updateInternal();
+    componentDidUpdate () {
+        if (!this.updateInternal())
+            return;
+        if (this.props.smartUpdate)
+            this.runSmartUpdate();
+    }
+
+    runSmartUpdate (gap = DEFAULT_SMART_UPDATE_GAP) {
+        if (gap === DEFAULT_SMART_UPDATE_GAP && this.smartUpdate) {
+            clearInterval(this.smartUpdate);
+            this.smartUpdate = 0;
+        } else if (this.smartUpdate)
+            return;
+        this.smartUpdate = setTimeout(() => {
+            this.smartUpdate = 0;
+            this.updateInternal();
+            if (typeof document.hidden !== "undefined" && document.hidden) {
+                let listener = document.addEventListener("visibilitychange", () => {
+                    if (document.hidden)
+                        return;
+                    document.removeEventListener("visibilitychange", listener);
+                    this.runSmartUpdate(gap * 2);
+                }, false);
+                return;
+            }
+            this.runSmartUpdate(gap * 2);
+        }, gap);
     }
 
     /**
@@ -166,9 +207,10 @@ export default class XMasonry extends React.Component {
     /**
      * Measure non-measured blocks and update measured ones.
      * @private
+     * @returns {boolean}
      */
     measureChildren () {
-        if (!this.container) return;
+        if (!this.container) return false;
         let blocks = {},
             update = false;
         for (let i = 0; i < this.container.children.length; i++) {
@@ -185,7 +227,9 @@ export default class XMasonry extends React.Component {
             if (!update) update = true;
         }
         //console.log(`Measure children, update=${ update }`);
-        if (update) this.recalculatePositions(blocks);
+        if (update)
+            this.recalculatePositions(blocks);
+        return update;
     }
 
     /**
@@ -240,7 +284,8 @@ export default class XMasonry extends React.Component {
         let toMeasure = 0;
         const elements = this.containerWidth === 0 ? [] :
             Array.prototype.slice.call(React.isValidElement(this.props.children)
-            ? [this.props.children] : this.props.children).map((element, i) => {
+                    ? [this.props.children]
+                    : this.props.children).map((element, i) => {
                 const key = element.key === null ? i : element.key;
                 const measured = this.blocks[key]; // || undefined
                 if (!measured) ++toMeasure;
@@ -270,9 +315,10 @@ export default class XMasonry extends React.Component {
         let actualHeight = elements.length - toMeasure > 0 || elements.length === 0
             ? this.fixedHeight = this.state.containerHeight
             : this.fixedHeight;
-        //console.log(`Render: measured=${ elements.length - toMeasure }, not=${ toMeasure }, blocks`, JSON.parse(JSON.stringify(this.blocks)));
-        const { center, maxColumns, responsive, targetBlockWidth, updateOnImagesLoad,
-            updateOnFontLoad, className, style, ...restProps } = this.props;
+        // console.log(`Render: measured=${ elements.length - toMeasure }, not=${ toMeasure
+        // }, blocks`, JSON.parse(JSON.stringify(this.blocks)));
+        const { center, maxColumns, responsive, smartUpdate, targetBlockWidth,
+            updateOnImagesLoad, updateOnFontLoad, className, style, ...restProps } = this.props;
         return <div className={className ? `xmasonry ${className}` : `xmasonry`}
                     style={ {
                         ...XMasonry.containerStyle,
