@@ -1,4 +1,4 @@
-# [react-xmasonry](npmjs.org/package/react-xmasonry)
+# [react-xmasonry](https://npmjs.org/package/react-xmasonry)
 
 [![npm](https://img.shields.io/npm/v/react-xmasonry.svg)](https://www.npmjs.com/package/react-xmasonry)
 [![Dependencies](https://img.shields.io/badge/dependencies-none-brightgreen.svg)](http://npm.anvaka.com/#/view/2d/react-xmasonry)
