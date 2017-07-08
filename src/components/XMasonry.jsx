@@ -243,8 +243,17 @@ export default class XMasonry extends React.Component {
      * @private
      */
     recalculatePositions (newBlocks = null, deletedBlocks = null) {
+
         let blocks,
             heights = Array.from({ length: this.columns }, () => 0);
+
+        for (const key in this.blocks) {
+            if (this.blocks.hasOwnProperty(key) && typeof this.blocks[key] === "undefined") {
+                if (deletedBlocks === null)
+                    deletedBlocks = {};
+                deletedBlocks[key] = {};
+            }
+        }
         if (deletedBlocks) {
             blocks = {};
             for (let key in this.blocks)
@@ -259,6 +268,7 @@ export default class XMasonry extends React.Component {
                 ...newBlocks
             }
         }
+
         for (let i = 0; i < this.container.children.length; i++) {
             let child = this.container.children[i],
                 key = child.getAttribute("data-key");
@@ -272,6 +282,7 @@ export default class XMasonry extends React.Component {
             blocks[key].width = Math.min(blockWidth, this.columns);
             for (let i = 0; i < blockWidth; ++i) heights[col + i] = newHeight;
         }
+
         if (this.props.center && heights[heights.length - 1] === 0) {
             let emptyColumns = 1;
             for (; heights[heights.length - 1 - emptyColumns] === 0; ++emptyColumns);
@@ -279,21 +290,28 @@ export default class XMasonry extends React.Component {
             for (let key in blocks)
                 if (blocks.hasOwnProperty(key)) blocks[key].left += leftMargin;
         }
+
         this.setState({
             blocks: this.blocks = blocks,
             containerHeight: Math.max.apply(null, heights)
         });
+
     }
 
     render () {
+
+        const allKeys = new Set();
         let toMeasure = 0;
-        const elements = this.containerWidth === 0 ? [] :
-            Array.prototype.slice.call(React.isValidElement(this.props.children)
+        const elements = this.containerWidth === 0
+            ? []
+            : Array.prototype.slice.call(React.isValidElement(this.props.children)
                     ? [this.props.children]
                     : this.props.children).map((element, i) => {
                 const key = element.key === null ? i : element.key;
                 const measured = this.blocks[key]; // || undefined
-                if (!measured) ++toMeasure;
+                if (!measured)
+                    ++toMeasure;
+                allKeys.add(key);
                 return measured
                     ? React.cloneElement(element, {
                         "data-key": key,
@@ -317,13 +335,23 @@ export default class XMasonry extends React.Component {
                         "parent": this
                     });
             });
+
+        for (let key in this.blocks) { // empty not used keys
+            if (!this.blocks.hasOwnProperty(key) || allKeys.has(key))
+                continue;
+            this.blocks[key] = undefined;
+        }
+
         let actualHeight = elements.length - toMeasure > 0 || elements.length === 0
             ? this.fixedHeight = this.state.containerHeight
             : this.fixedHeight;
+
         // console.log(`Render: measured=${ elements.length - toMeasure }, not=${ toMeasure
         // }, blocks`, JSON.parse(JSON.stringify(this.blocks)));
+
         const { center, maxColumns, responsive, smartUpdate, smartUpdateCeil, targetBlockWidth,
             updateOnImagesLoad, updateOnFontLoad, className, style, ...restProps } = this.props;
+
         return <div className={className ? `xmasonry ${className}` : `xmasonry`}
                     style={ {
                         ...XMasonry.containerStyle,
@@ -334,6 +362,7 @@ export default class XMasonry extends React.Component {
                     { ...restProps }>
             { elements }
         </div>;
+
     }
 
 }
