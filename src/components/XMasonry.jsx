@@ -300,7 +300,7 @@ export default class XMasonry extends React.Component {
 
     render () {
 
-        const allKeys = new Set();
+        const allKeys = {};
         let toMeasure = 0;
         const elements = this.containerWidth === 0
             ? []
@@ -311,7 +311,7 @@ export default class XMasonry extends React.Component {
                 const measured = this.blocks[key]; // || undefined
                 if (!measured)
                     ++toMeasure;
-                allKeys.add(key);
+                allKeys[key] = null;
                 return measured
                     ? React.cloneElement(element, {
                         "data-key": key,
@@ -337,7 +337,7 @@ export default class XMasonry extends React.Component {
             });
 
         for (let key in this.blocks) { // empty not used keys
-            if (!this.blocks.hasOwnProperty(key) || allKeys.has(key))
+            if (!this.blocks.hasOwnProperty(key) || allKeys.hasOwnProperty(key))
                 continue;
             this.blocks[key] = undefined;
         }
