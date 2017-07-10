@@ -33,6 +33,18 @@ export default class XMasonry extends React.Component {
         position: `relative`
     };
 
+    static scrollbarSize = (() => {
+        const el = document.createElement("div");
+        el.style.overflow = "scroll";
+        el.style.height = el.style.width = "200px";
+        el.style.visibility = "hidden";
+        el.style.padding = el.style.margin = el.style.border = 0;
+        document.body.appendChild(el);
+        const scrollBarWidth = (el.offsetWidth - el.clientWidth) || 0;
+        document.body.removeChild(el);
+        return scrollBarWidth;
+    })();
+
     getBestFitColumn (heights, width = 1) {
         const actualCols = Math.min(heights.length - width + 1, this.props.maxColumns - width + 1);
         let minIndex = 0,
@@ -199,8 +211,16 @@ export default class XMasonry extends React.Component {
     updateContainerWidth () {
         if (!this.container) return false;
         let newWidth = this.container.clientWidth;
-        if (newWidth === this.containerWidth)
+        if (
+            newWidth === this.containerWidth
+            || newWidth === this.containerWidth + this.constructor.scrollbarSize
+			// This condition is required to prevent XMasonry from infinitely looping in some cases
+			// when scrollbar appears. This works in case of dynamic content, when scrollbar appear
+			// causes content to change, and because this change scrollbar disappears, and so on:
+			// this repeats infinitely.
+        ) {
             return false;
+        }
         this.setState({
             columns: this.columns = this.getColumnsNumber(newWidth),
             containerWidth: this.containerWidth = newWidth,
@@ -347,7 +367,9 @@ export default class XMasonry extends React.Component {
             : this.fixedHeight;
 
         // console.log(`Render: measured=${ elements.length - toMeasure }, not=${ toMeasure
-        // }, blocks`, JSON.parse(JSON.stringify(this.blocks)));
+        //         }, W=${ this.containerWidth }, H=${ actualHeight }, fixedH=${
+        //         !(elements.length - toMeasure > 0 || elements.length === 0) } blocks`,
+        //     JSON.parse(JSON.stringify(this.blocks)));
 
         const { center, maxColumns, responsive, smartUpdate, smartUpdateCeil, targetBlockWidth,
             updateOnImagesLoad, updateOnFontLoad, className, style, ...restProps } = this.props;

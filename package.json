@@ -1,12 +1,11 @@
 {
   "name": "react-xmasonry",
-  "version": "2.2.3",
+  "version": "2.3.0",
   "description": "Simple & featured native masonry layout implementation for React JS",
   "main": "dist/index.js",
   "module": "src/index.jsx",
   "scripts": {
-    "build": "webpack -p",
-    "test": "echo \"No tests specified\" && exit 0"
+    "build": "webpack -p"
   },
   "author": "ZitRo",
   "license": "MIT",
@@ -16,13 +15,16 @@
     "javascript",
     "masonry",
     "layout",
+    "cards",
     "responsive",
     "auto",
     "automatic",
     "grid",
     "native",
     "light",
-    "minimalistic"
+    "minimalistic",
+    "dynamic",
+    "width"
   ],
   "repository": {
     "type": "git",
