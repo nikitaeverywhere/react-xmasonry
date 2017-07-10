@@ -1,7 +1,25 @@
 import React from "react";
 import debounce from "../utils/debounce.jsx";
 
+let scrollbarSize = 0,
+    scrollbarComputed = false;
+
 const DEFAULT_SMART_UPDATE_GAP = 100;
+const setScrollbarSize = () => {
+    if (!document.body) {
+        document.addEventListener(`DOMContentLoaded`, setScrollbarSize);
+        return;
+    }
+    const el = document.createElement("div");
+    el.style.overflow = "scroll";
+    el.style.height = el.style.width = "200px";
+    el.style.visibility = "hidden";
+    el.style.padding = el.style.margin = el.style.border = 0;
+    document.body.appendChild(el);
+    scrollbarSize = (el.offsetWidth - el.clientWidth) || 0;
+    scrollbarComputed = true;
+    document.body.removeChild(el);
+};
 
 /**
  * @npm react-xmasonry
@@ -32,18 +50,6 @@ export default class XMasonry extends React.Component {
     static containerStyle = {
         position: `relative`
     };
-
-    static scrollbarSize = (() => {
-        const el = document.createElement("div");
-        el.style.overflow = "scroll";
-        el.style.height = el.style.width = "200px";
-        el.style.visibility = "hidden";
-        el.style.padding = el.style.margin = el.style.border = 0;
-        document.body.appendChild(el);
-        const scrollBarWidth = (el.offsetWidth - el.clientWidth) || 0;
-        document.body.removeChild(el);
-        return scrollBarWidth;
-    })();
 
     getBestFitColumn (heights, width = 1) {
         const actualCols = Math.min(heights.length - width + 1, this.props.maxColumns - width + 1);
@@ -118,6 +124,8 @@ export default class XMasonry extends React.Component {
 
     constructor (props) {
         super(props);
+        if (!scrollbarComputed)
+            setScrollbarSize();
         if (this.props.responsive)
             window.addEventListener("resize", this.debouncedResize);
         if (this.props.updateOnFontLoad && document.fonts && document.fonts.addEventListener)
@@ -213,7 +221,7 @@ export default class XMasonry extends React.Component {
         let newWidth = this.container.clientWidth;
         if (
             newWidth === this.containerWidth
-            || newWidth === this.containerWidth + this.constructor.scrollbarSize
+            || newWidth === this.containerWidth + scrollbarSize
 			// This condition is required to prevent XMasonry from infinitely looping in some cases
 			// when scrollbar appears. This works in case of dynamic content, when scrollbar appear
 			// causes content to change, and because this change scrollbar disappears, and so on:
