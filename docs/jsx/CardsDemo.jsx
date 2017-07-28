@@ -72,14 +72,20 @@ export default class CardsDemo extends React.Component {
                 <button onClick={ this.deleteCard.bind(this) }>Delete random card</button>
                 <button onClick={ this.replaceCard.bind(this) }>Replace random card</button>
             </div>
-            <XMasonry>{ this.state.data.map((d, i) =>
+            <XMasonry>
+                <XBlock key={ "persistent" }>
+                    <div className="card" style={ { backgroundColor: "white" } }>
+                        <h1>Persistent card</h1>
+                        <p>This card should always be the first card in this demo.</p>
+                    </div>
+                </XBlock>{ this.state.data.map((d, i) =>
                 <XBlock key={ d.id } width={ d.width || 1 }>
                     <div className="card" style={{ backgroundColor: d.color }}>
                         <h1>{ d.header }<sup>{ d.id }</sup></h1>
                         <p>{ d.body }</p>
                     </div>
-                </XBlock>
-            )}</XMasonry>
+                </XBlock> )}
+            </XMasonry>
         </div>
     }
 

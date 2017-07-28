@@ -156,16 +156,17 @@ export default class XMasonry extends React.Component {
 
     componentWillReceiveProps (newProps) {
         // Other conditions are already covered, except of removing children without adding new ones
-        if (newProps.children.length < this.props.children.length) {
+        if (React.Children.count(newProps.children) < React.Children.count(this.props.children)) {
             let newKeys = new Set(),
                 deleted = {};
-            for (let i = 0; i < newProps.children.length; i++)
-                newKeys.add(newProps.children[i].key === null ? i : newProps.children[i].key);
-            for (let i = 0; i < this.props.children.length; i++) {
-                const key = this.props.children[i].key === null ? i : this.props.children[i].key;
+            React.Children.forEach(newProps.children, (child, i) =>
+                newKeys.add(child.key === null ? i : child.key)
+            );
+            React.Children.forEach(this.props.children, (child, i) => {
+                const key = child.key === null ? i : child.key;
                 if (!newKeys.has(key))
                     deleted[key] = {};
-            }
+            });
             this.recalculatePositions(null, deleted);
         }
     }
@@ -330,39 +331,36 @@ export default class XMasonry extends React.Component {
 
         const allKeys = {};
         let toMeasure = 0;
-        const elements = this.containerWidth === 0
-            ? []
-            : Array.prototype.slice.call(React.isValidElement(this.props.children)
-                    ? [this.props.children]
-                    : this.props.children).map((element, i) => {
-                const key = element.key === null ? i : element.key;
-                const measured = this.blocks[key]; // || undefined
-                if (!measured)
-                    ++toMeasure;
-                allKeys[key] = null;
-                return measured
-                    ? React.cloneElement(element, {
-                        "data-key": key,
-                        "key": key,
-                        "style": {
-                            left: Math.floor(measured.left),
-                            top: measured.top
-                        },
-                        "measured": true,
-                        "height": measured.height,
-                        "parent": this
-                    })
-                    : React.cloneElement(element, {
-                        "data-key": key,
-                        "data-xkey": key,
-                        "key": key,
-                        "style": {
-                            visibility: "hidden"
-                        },
-                        "height": 0,
-                        "parent": this
-                    });
-            });
+        const elements = this.containerWidth === 0 ? [] : this.props.children;
+        const children = React.Children.map(elements, (element, i) => {
+            const key = element.key === null ? i : element.key;
+            const measured = this.blocks[key]; // || undefined
+            if (!measured)
+                ++toMeasure;
+            allKeys[key] = null;
+            return measured
+                ? React.cloneElement(element, {
+                    "data-key": key,
+                    "key": key,
+                    "style": {
+                        left: Math.floor(measured.left),
+                        top: measured.top
+                    },
+                    "measured": true,
+                    "height": measured.height,
+                    "parent": this
+                })
+                : React.cloneElement(element, {
+                    "data-key": key,
+                    "data-xkey": key,
+                    "key": key,
+                    "style": {
+                        visibility: "hidden"
+                    },
+                    "height": 0,
+                    "parent": this
+                });
+        });
 
         for (let key in this.blocks) { // empty not used keys
             if (!this.blocks.hasOwnProperty(key) || allKeys.hasOwnProperty(key))
@@ -370,17 +368,17 @@ export default class XMasonry extends React.Component {
             this.blocks[key] = undefined;
         }
 
-        let actualHeight = elements.length - toMeasure > 0 || elements.length === 0
+        let actualHeight = children.length - toMeasure > 0 || children.length === 0
             ? this.fixedHeight = this.state.containerHeight
             : this.fixedHeight;
 
-        // console.log(`Render: measured=${ elements.length - toMeasure }, not=${ toMeasure
+        // console.log(`Render: measured=${ children.length - toMeasure }, not=${ toMeasure
         //         }, W=${ this.containerWidth }, H=${ actualHeight }, fixedH=${
-        //         !(elements.length - toMeasure > 0 || elements.length === 0) } blocks`,
-        //     JSON.parse(JSON.stringify(this.blocks)));
+        //         !(children.length - toMeasure > 0 || children.length === 0) } blocks`,
+        //     JSON.parse(JSON.stringify(this.blocks)), children, this.props.children);
 
         const { center, maxColumns, responsive, smartUpdate, smartUpdateCeil, targetBlockWidth,
-            updateOnImagesLoad, updateOnFontLoad, className, style, ...restProps } = this.props;
+            updateOnImagesLoad, updateOnFontLoad, className, style, ...otherProps } = this.props;
 
         return <div className={className ? `xmasonry ${className}` : `xmasonry`}
                     style={ {
@@ -389,8 +387,8 @@ export default class XMasonry extends React.Component {
                         ...style
                     } }
                     ref={ (c) => this.container = c }
-                    { ...restProps }>
-            { elements }
+                    { ...otherProps }>
+            { children }
         </div>;
 
     }
