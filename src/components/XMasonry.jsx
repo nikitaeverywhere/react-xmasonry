@@ -331,7 +331,7 @@ export default class XMasonry extends React.Component {
 
         const allKeys = {};
         let toMeasure = 0;
-        const elements = this.containerWidth === 0 ? [] : this.props.children;
+        const elements = this.containerWidth === 0 ? [] : (this.props.children || []);
         const children = React.Children.map(elements, (element, i) => {
             const key = element.key === null ? i : element.key;
             const measured = this.blocks[key]; // || undefined
