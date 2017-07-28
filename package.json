@@ -1,6 +1,6 @@
 {
   "name": "react-xmasonry",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "description": "Simple & featured native masonry layout implementation for React JS",
   "main": "dist/index.js",
   "module": "src/index.jsx",
@@ -31,8 +31,9 @@
     "type": "git",
     "url": "https://github.com/ZitRos/react-xmasonry.git"
   },
+  "homepage": "https://zitros.github.io/react-xmasonry",
   "peerDependencies": {
-    "react": "^0.14.x || ^15.x"
+    "react": ">= 0.14.0"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",
