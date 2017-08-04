@@ -5,7 +5,7 @@
  * @param {number} rate - De-bouncing rate.
  * @returns {function}
  */
-export default function debounce (f, rate = 45) {
+export const debounce = (f, rate = 45) => {
     let timeout = 0;
     return () => {
         if (timeout !== 0)
@@ -15,4 +15,6 @@ export default function debounce (f, rate = 45) {
             f();
         }, rate);
     }
-}
+};
+
+export const isServer = !(typeof document !== "undefined" && typeof window !== "undefined");

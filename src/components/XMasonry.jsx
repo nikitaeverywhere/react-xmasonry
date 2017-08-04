@@ -1,11 +1,14 @@
 import React from "react";
-import debounce from "../utils/debounce.jsx";
+import { debounce, isServer } from "../utils/index.jsx";
 
 let scrollbarSize = 0,
     scrollbarComputed = false;
 
 const DEFAULT_SMART_UPDATE_GAP = 100;
+const DEFAULT_SERVER_COLUMNS = 3;
 const setScrollbarSize = () => {
+    if (isServer)
+        return;
     if (!document.body) {
         document.addEventListener(`DOMContentLoaded`, setScrollbarSize);
         return;
@@ -26,7 +29,7 @@ const setScrollbarSize = () => {
  */
 export default class XMasonry extends React.Component {
 
-    // static propTypes = { // React.propTypes are deprecated as of React v15.5
+    // static propTypes = {
     //     center: React.PropTypes.bool,
     //     maxColumns: React.PropTypes.number,
     //     responsive: React.PropTypes.bool,
@@ -38,7 +41,7 @@ export default class XMasonry extends React.Component {
 
     static defaultProps = {
         center: true,
-        maxColumns: Infinity,
+        maxColumns: isServer ? DEFAULT_SERVER_COLUMNS : Infinity,
         responsive: true,
         smartUpdate: true,
         smartUpdateCeil: Infinity,
@@ -126,11 +129,15 @@ export default class XMasonry extends React.Component {
         super(props);
         if (!scrollbarComputed)
             setScrollbarSize();
-        if (this.props.responsive)
+        if (this.props.responsive && !isServer) {
             window.addEventListener("resize", this.debouncedResize);
-        if (this.props.updateOnFontLoad && document.fonts && document.fonts.addEventListener)
+        }
+        if (
+            !isServer && this.props.updateOnFontLoad
+            && document.fonts && document.fonts.addEventListener
+        ) {
             document.fonts.addEventListener("loadingdone", this.update);
-        this.updateContainerWidth();
+        }
     }
 
     /**
@@ -146,10 +153,20 @@ export default class XMasonry extends React.Component {
         this.updateInternal();
     }
 
+    componentWillMount() {
+        this.updateContainerWidth();
+    }
+
     componentWillUnmount () {
-        window.removeEventListener("resize", this.debouncedResize);
-        if (this.props.updateOnFontLoad && document.fonts && document.fonts.addEventListener)
+        if (!isServer) {
+            window.removeEventListener("resize", this.debouncedResize);
+        }
+        if (
+            !isServer && this.props.updateOnFontLoad
+            && document.fonts && document.fonts.addEventListener
+        ) {
             document.fonts.removeEventListener("loadingdone", this.update);
+        }
         if (this.smartUpdate)
             clearTimeout(this.smartUpdate);
     }
@@ -185,7 +202,7 @@ export default class XMasonry extends React.Component {
         } else if (this.smartUpdate)
             return;
         this.smartUpdate = setTimeout(() => {
-            const hidden = typeof document.hidden !== "undefined" && document.hidden;
+            const hidden = !isServer && typeof document.hidden !== "undefined" && document.hidden;
             if (hidden) {
                 let listener = document.addEventListener("visibilitychange", () => {
                     if (document.hidden)
@@ -218,8 +235,11 @@ export default class XMasonry extends React.Component {
      * @returns {boolean} - Width updated.
      */
     updateContainerWidth () {
-        if (!this.container) return false;
-        let newWidth = this.container.clientWidth;
+        let newWidth = isServer && !this.container
+            ? (this.props.width || (this.props.targetBlockWidth * 999))
+            : this.container
+                ? this.container.clientWidth
+                : 0;
         if (
             newWidth === this.containerWidth
             || newWidth === this.containerWidth + scrollbarSize
@@ -244,9 +264,12 @@ export default class XMasonry extends React.Component {
      * @returns {boolean}
      */
     measureChildren () {
+
         if (!this.container) return false;
+
         let blocks = {},
             update = false;
+
         for (let i = 0; i < this.container.children.length; i++) {
             let child = this.container.children[i],
                 hasXKey = child.hasAttribute("data-xkey"),
@@ -260,10 +283,12 @@ export default class XMasonry extends React.Component {
             };
             if (!update) update = true;
         }
-        //console.log(`Measure children, update=${ update }`);
+
         if (update)
             this.recalculatePositions(blocks);
+
         return update;
+
     }
 
     /**
@@ -355,7 +380,7 @@ export default class XMasonry extends React.Component {
                     "data-xkey": key,
                     "key": key,
                     "style": {
-                        visibility: "hidden"
+                        visibility: isServer ? "visible" : "hidden"
                     },
                     "height": 0,
                     "parent": this
@@ -372,18 +397,20 @@ export default class XMasonry extends React.Component {
             ? this.fixedHeight = this.state.containerHeight
             : this.fixedHeight;
 
-        // console.log(`Render: measured=${ children.length - toMeasure }, not=${ toMeasure
+        // console.log(`XMasonry debug: measured=${ children.length - toMeasure }, not=${ toMeasure
         //         }, W=${ this.containerWidth }, H=${ actualHeight }, fixedH=${
         //         !(children.length - toMeasure > 0 || children.length === 0) } blocks`,
         //     JSON.parse(JSON.stringify(this.blocks)), children, this.props.children);
 
-        const { center, maxColumns, responsive, smartUpdate, smartUpdateCeil, targetBlockWidth,
-            updateOnImagesLoad, updateOnFontLoad, className, style, ...otherProps } = this.props;
+        const {
+            center, maxColumns, responsive, smartUpdate, smartUpdateCeil, targetBlockWidth,
+            updateOnImagesLoad, updateOnFontLoad, className, style, ...otherProps
+        } = this.props;
 
-        return <div className={className ? `xmasonry ${className}` : `xmasonry`}
+        return <div className={ `xmasonry${ isServer ? " xmasonry-static" : "" }${ className ? " " + className : "" }` }
                     style={ {
                         ...XMasonry.containerStyle,
-                        height: actualHeight,
+                        height: isServer ? undefined : actualHeight,
                         ...style
                     } }
                     ref={ (c) => this.container = c }

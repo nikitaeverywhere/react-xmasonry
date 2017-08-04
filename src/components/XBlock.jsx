@@ -1,4 +1,5 @@
 import React from "react";
+import { isServer } from "../utils/index.jsx";
 
 /**
  * XBlock represents the grid cell (div). Do not apply custom styling and margins on this block.
@@ -15,7 +16,7 @@ export default class XBlock extends React.Component {
     };
 
     static defaultStyle = {
-        position: `absolute`,
+        position: isServer ? undefined : `absolute`,
         boxSizing: `border-box`
     };
 
@@ -55,7 +56,7 @@ export default class XBlock extends React.Component {
         return <div data-width={ columns }
                     { ...rest }
                     style={ { ...style, ...XBlock.defaultStyle } }
-                    className={ measured ? `xblock` : `` }
+                    className={ measured ? `xblock` : (isServer ? `xblock xblock-static` : ``) }
                     ref = { (x) => this.divElement = x }>
             { this.props.children }
         </div>;

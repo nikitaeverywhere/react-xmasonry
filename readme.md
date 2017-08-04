@@ -1,4 +1,4 @@
-# [react-xmasonry](https://npmjs.org/package/react-xmasonry)
+# [XMasonry](https://npmjs.org/package/react-xmasonry): a Masonry Layout for React JS
 
 [![npm](https://img.shields.io/npm/v/react-xmasonry.svg)](https://www.npmjs.com/package/react-xmasonry)
 [![Dependencies](https://img.shields.io/badge/dependencies-none-brightgreen.svg)](http://npm.anvaka.com/#/view/2d/react-xmasonry)
@@ -14,11 +14,12 @@ Responsive, minimalistic and full-featured __native__ masonry layout (grid) for 
 Features
 --------
 
-+ React JS native masonry layout implementation with no dependencies.
-+ Minimalistic design and simple use case.
-+ Ability to control blocks width (in columns) and columns targeting width.
++ Native masonry layout implementation for React JS with no dependencies.
++ Minimalistic by design and simple use case.
++ Ability to control blocks width (in columns), columns targeting width in pixels, maximum number of columns, centering, etc.
 + Responsive, mobile-friendly approach (so there is no "fixed block width" option).
 + Fully customizable: use CSS animations and transitions you wish (use `.xmasonry` and `.xblock` selectors).
++ Works with the server rendering.
 
 [Demo](https://zitros.github.io/react-xmasonry)
 -----------------------------------------------
@@ -26,6 +27,21 @@ Features
 Check the XMasonry [demos page](https://zitros.github.io/react-xmasonry). You can also see the
 [notes application](https://zitros.github.io/easy-local-notes/) made with `react-xmasonry`. 
 Play with [this code pen](https://codepen.io/ZitRos/pen/GmrLQB) to see what XMasonry can.
+
+Table of Contents
+---------------
+
+1. [Installation & Usage](#installation)
+2. [Basic Usage](#usage)
+3. [Styling](#usage)
+    1. [Animations & Transitions](#animations-and-transitions)
+    2. [Server Rendering Note](#server-rendering-note)
+4. [Configuring Components](#configuring-components)
+    1. [<XMasonry> Component Properties](#xmasonry-component-properties)
+    2. [<XBlock> Component Properties](#xblock-component-properties)
+    3. [Accessing <XMasonry> by Reference](#accessing-xmasonry-by-reference)
+5. [XMasonry Under the Hood](#xmasonry-under-the-hood)
+6. [License](#license)
 
 Installation
 ------------
@@ -58,20 +74,35 @@ The simplest layout using JSX and a little styling may look like as following:
 
 ```jsx
 render () {
-    const data = [1, 2, 3, 4, 5];
-    return <XMasonry>{ data.map(number =>
-        <XBlock key={ number }>
+    return <XMasonry>
+        <XBlock>
             <div className="card">
-                <h1>Card #{ number }</h1>
+                <h1>Simple Card</h1>
                 <p>Any text!</p>
             </div>
         </XBlock>
-    )}</XMasonry>
+        <XBlock width={ 2 }>
+            <div className="card">
+                <h1>Wider card</h1>
+                <p>Any text!</p>
+            </div>
+        </XBlock>
+    </XMasonry>
 }
 ```
 
 There is no more JavaScript than positioning and sizing! Use any CSS to make animations and 
-transitions you like (`.xmasonry` and `.xblock` selectors), for example:
+transitions you like (`.xmasonry` and `.xblock` selectors). And all the further magic XMasonry will 
+do for you. See the [demos page](https://zitros.github.io/react-xmasonry) sources
+[here](https://github.com/ZitRos/react-xmasonry/blob/master/docs/jsx/CardsDemo.jsx).
+ 
+Styling
+-------
+
+### Animations and Transitions
+
+If you want to put transitions/animations on XMasonry, using the `.xmasonry` and `.xblock` 
+selectors. For example:
 
 ```css
 @keyframes comeIn {
@@ -94,8 +125,37 @@ transitions you like (`.xmasonry` and `.xblock` selectors), for example:
 }
 ```
 
-And all the further magic XMasonry will do for you. See the [demos page](https://zitros.github.io/react-xmasonry)
-sources [here](https://github.com/ZitRos/react-xmasonry/blob/master/docs/jsx/CardsDemo.jsx).
+Warning: do not apply any display/positioning/margin styles to `.xblock` selector. Instead, create a 
+child element to XBlock, for example, `.card`, and put any styles you need to it. XBlock's 
+dimensions are used in calculations and any styling like adding margins may create an unwanted 
+result. 
+
+Warning: do not stick XBlock's content styling to `.xblock` selector. Use `.xmasonry` instead. See
+how [XMasonry works](#xmasonry-under-the-hood) to understand why: the `.xblock` class is applied
+only **after** the content measurements are done.
+
+### Server Rendering Note
+
+XMasonry, being rendered on the server ([renderToStaticMarkup](https://facebook.github.io/react/docs/react-dom-server)),
+will be unable to detect content heights due server rendering algorithm limitations. 
+Nevertheless, rendering on the server is possible and won't affect anything (like CEO) but the 
+consistent view with the client-rendered result. To make even this behavior configurable, XMasonry,
+when triggered to render contents on the server, puts additional `.xmasonry-static` and
+`.xblock-static` classes respectively, as well as changes some styles to make each XBlock render as
+a static-positioned block (by default). You can apply additional styles to this selector to make the 
+server-rendered result look more consistent with the client's one, for example:
+
+```css
+.xmasonry-static {
+    text-align: center;
+    overflow: auto;
+}
+
+.xblock-static {
+    float: left;
+    text-align: left;
+}
+```
 
 Configuring Components
 ----------------------
@@ -147,7 +207,8 @@ By default, XMasonry sniff and automatically update on the next events:
 4. Children changes like adding, replacing or deleting children.
 5. After any change in layout happens, see `smartUpdate` prop.
 
-### XMasonry Under the Hood
+XMasonry Under the Hood
+-----------------------
 
 Technically, XMasonry component renders 3 times:
 
@@ -167,7 +228,7 @@ be performed. Check `smartUpdate` prop description for more information.
 Once the window size gets changed (default behavior), the "force update" technique is applied, which
 do the IR and AR phases again.
 
-Licence
+License
 -------
 
-[MIT](LICENSE) © [Nikita Savchenko](https://nikita.tk)
+[MIT license](LICENSE) © [Nikita Savchenko](https://nikita.tk)
