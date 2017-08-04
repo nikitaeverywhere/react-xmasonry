@@ -139,7 +139,7 @@ only **after** the content measurements are done.
 
 XMasonry, being rendered on the server ([renderToStaticMarkup](https://facebook.github.io/react/docs/react-dom-server)),
 will be unable to detect content heights due server rendering algorithm limitations. 
-Nevertheless, rendering on the server is possible and won't affect anything (like CEO) but the 
+Nevertheless, rendering on the server is possible and won't affect anything (like SEO) but the 
 consistent view with the client-rendered result. To make even this behavior configurable, XMasonry,
 when triggered to render contents on the server, puts additional `.xmasonry-static` and
 `.xblock-static` classes respectively, as well as changes some styles to make each XBlock render as
