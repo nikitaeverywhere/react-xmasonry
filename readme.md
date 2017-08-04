@@ -16,8 +16,8 @@ Features
 
 + Native masonry layout implementation for React JS with no dependencies.
 + Minimalistic by design and simple use case.
++ Responsive, mobile-friendly approach (so there is no "fixed block width in pixels" option).
 + Ability to control blocks width (in columns), columns targeting width in pixels, maximum number of columns, centering, etc.
-+ Responsive, mobile-friendly approach (so there is no "fixed block width" option).
 + Fully customizable: use CSS animations and transitions you wish (use `.xmasonry` and `.xblock` selectors).
 + Works with the server rendering.
 
@@ -31,15 +31,15 @@ Play with [this code pen](https://codepen.io/ZitRos/pen/GmrLQB) to see what XMas
 Table of Contents
 ---------------
 
-1. [Installation & Usage](#installation)
+1. [Installation](#installation)
 2. [Basic Usage](#usage)
-3. [Styling](#usage)
+3. [Styling](#styling)
     1. [Animations & Transitions](#animations-and-transitions)
     2. [Server Rendering Note](#server-rendering-note)
 4. [Configuring Components](#configuring-components)
-    1. [<XMasonry> Component Properties](#xmasonry-component-properties)
-    2. [<XBlock> Component Properties](#xblock-component-properties)
-    3. [Accessing <XMasonry> by Reference](#accessing-xmasonry-by-reference)
+    1. [&lt;XMasonry&gt; Properties](#xmasonry-component-properties)
+    2. [&lt;XBlock&gt; Properties](#xblock-component-properties)
+    3. [Accessing &lt;XMasonry&gt; by Reference](#accessing-xmasonry-by-reference)
 5. [XMasonry Under the Hood](#xmasonry-under-the-hood)
 6. [License](#license)
 
@@ -50,7 +50,7 @@ Installation
 npm install react-xmasonry --save-dev
 ```
 
-Or, if you use the old-style `<script>` tag or need UMD module for demos, use the next:
+Or, if you use the old-style `<script>` tag or need an UMD module for demos, use this:
 
 ```html
 <script type="text/javascript" src="https://unpkg.com/react-xmasonry/dist/index.js"></script>
@@ -231,4 +231,4 @@ do the IR and AR phases again.
 License
 -------
 
-[MIT license](LICENSE) © [Nikita Savchenko](https://nikita.tk)
+[MIT](LICENSE) © [Nikita Savchenko](https://nikita.tk)
