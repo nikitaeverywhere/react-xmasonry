@@ -197,7 +197,7 @@ Note that all the listed properties of `<XMasonry>` component are **read-only**.
 | Ref Property | Type | Description |
 |---|---|---|
 | `columns` | `number` | The number of currently rendered columns. |
-| `container` | `HTMLElement` | The `<div>` block containing layout. |
+| `container` | `HTMLElement` | The `<div>` block containing the layout. |
 | `update` | `function` | Trigger this function to update nested `XBlock`s sizes and positions. It is **safe to trigger this function multiple times**, updates are optimized. Technically, this function will check if any of containers changed its size and re-render XMasonry only if size was changed. |
 
 By default, XMasonry sniff and automatically update on the next events:
