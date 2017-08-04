@@ -3,6 +3,7 @@
 [![npm](https://img.shields.io/npm/v/react-xmasonry.svg)](https://www.npmjs.com/package/react-xmasonry)
 [![Dependencies](https://img.shields.io/badge/dependencies-none-brightgreen.svg)](http://npm.anvaka.com/#/view/2d/react-xmasonry)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/c073dc0dc2744d5b950418bf5fbcc820)](https://www.codacy.com/app/ZitRos/react-xmasonry?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ZitRos/react-xmasonry&amp;utm_campaign=Badge_Grade)
+[![Build Status](https://travis-ci.org/ZitRos/react-xmasonry.svg?branch=master)](https://travis-ci.org/ZitRos/react-xmasonry)
 [![npm](https://img.shields.io/npm/dm/react-xmasonry.svg)](https://www.npmjs.com/package/react-xmasonry)
 [![License](https://img.shields.io/github/license/zitros/react-xmasonry.svg)](LICENSE)
 [![File Size](http://img.badgesize.io/ZitRos/react-xmasonry/master/dist/index.js)](https://github.com/ZitRos/react-xmasonry/blob/master/dist/index.js)

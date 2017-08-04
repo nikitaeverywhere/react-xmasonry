@@ -11,3 +11,6 @@ node_modules/
 .idea
 .npmignore
 *.iml
+.travis.yml
+test.js
+package-lock.json
