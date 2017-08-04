@@ -5,7 +5,7 @@ import React from "react";
  */
 export default class XBlock extends React.Component {
 
-    // static propTypes = { // React.propTypes are deprecated as of React v15.5
+    // static propTypes = {
     //     width: React.PropTypes.number
     // };
 
@@ -50,7 +50,7 @@ export default class XBlock extends React.Component {
     render () {
         const { width, height, measured, parent, style, ...rest } = this.props,
               maxColumns = this.props.parent.columns,
-              columns = Math.min(width || 1, maxColumns);
+              columns = Math.min(width || 1, maxColumns, this.props.parent.props.maxColumns);
         style.width = Math.floor(columns * this.props.parent.containerWidth / maxColumns);
         return <div data-width={ columns }
                     { ...rest }

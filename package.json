@@ -1,6 +1,6 @@
 {
   "name": "react-xmasonry",
-  "version": "2.4.2",
+  "version": "2.4.3",
   "description": "Simple & featured native masonry layout implementation for React JS",
   "main": "dist/index.js",
   "module": "src/index.jsx",
@@ -43,6 +43,7 @@
     "babel-preset-stage-0": "^6.24.1",
     "babel-register": "^6.24.1",
     "react": "^15.6.1",
+    "react-dom": "^15.6.1",
     "webpack": "^3.1.0"
   }
 }
