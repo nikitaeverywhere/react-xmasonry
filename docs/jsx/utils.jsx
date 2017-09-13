@@ -27,15 +27,21 @@ export function getRandomText (length = undefined) {
 }
 
 export function generateArticles () {
-    return Array.from({ length: 7 + Math.floor(Math.random() * 5) },
-        () => ({
+
+    let arr = new Array(7 + Math.floor(Math.random() * 5));
+
+    for (let i = 0; i < arr.length; ++i) {
+        arr[i] = {
             id: ++globalID,
             title: getRandomText(1).slice(0, 50),
             text: `${ getRandomText() }.`,
             cover: `https://source.unsplash.com/random/1600x900.${ Math.random().toString().slice(2) }`,
             cardWidth: Math.random() > 0.8 ? 2 : 1
-        })
-    );
+        };
+    }
+
+    return arr;
+
 }
 
 export function getRandomCard (id) {

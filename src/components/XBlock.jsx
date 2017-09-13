@@ -38,7 +38,7 @@ export default class XBlock extends React.Component {
         this.placed = true;
         const parent = this.props.parent;
         requestAnimationFrame(() => { if (!this.divElement) return;
-            let images = Array.from(this.divElement.querySelectorAll(`img`)),
+            let images = Array.prototype.slice.call(this.divElement.querySelectorAll(`img`)),
                 handleImages = images.length > 0 && parent.props.updateOnImagesLoad;
             if (handleImages) images.forEach(
                 (img) => !img.complete && img.addEventListener(`load`, parent.update)

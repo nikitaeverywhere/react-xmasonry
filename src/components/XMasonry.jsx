@@ -299,7 +299,10 @@ export default class XMasonry extends React.Component {
     recalculatePositions (newBlocks = null, deletedBlocks = null) {
 
         let blocks,
-            heights = Array.from({ length: this.columns }, () => 0);
+            heights = [];
+
+        for (let c = 0; c < this.columns; ++c)
+            heights.push(0);
 
         for (const key in this.blocks) {
             if (this.blocks.hasOwnProperty(key) && typeof this.blocks[key] === "undefined") {
