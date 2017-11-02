@@ -232,4 +232,4 @@ do the IR and AR phases again.
 License
 -------
 
-[MIT](LICENSE) © [Nikita Savchenko](https://nikita.tk)
+[MIT](license) © [Nikita Savchenko](https://nikita.tk)
