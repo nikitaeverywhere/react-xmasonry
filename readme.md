@@ -2,7 +2,6 @@
 
 [![npm](https://img.shields.io/npm/v/react-xmasonry.svg)](https://www.npmjs.com/package/react-xmasonry)
 [![Dependencies](https://img.shields.io/badge/dependencies-none-brightgreen.svg)](http://npm.anvaka.com/#/view/2d/react-xmasonry)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c073dc0dc2744d5b950418bf5fbcc820)](https://www.codacy.com/app/ZitRos/react-xmasonry?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ZitRos/react-xmasonry&amp;utm_campaign=Badge_Grade)
 [![Build Status](https://travis-ci.org/ZitRos/react-xmasonry.svg?branch=master)](https://travis-ci.org/ZitRos/react-xmasonry)
 [![npm](https://img.shields.io/npm/dm/react-xmasonry.svg)](https://www.npmjs.com/package/react-xmasonry)
 [![License](https://img.shields.io/github/license/zitros/react-xmasonry.svg)](LICENSE)
@@ -16,11 +15,11 @@ Features
 --------
 
 + Native masonry layout implementation for React JS with no dependencies.
-+ Minimalistic by design and simple use case.
++ Minimalistic by design.
 + Responsive, mobile-friendly approach (so there is no "fixed block width in pixels" option).
-+ Ability to control blocks width (in columns), columns targeting width in pixels, maximum number of columns, centering, etc.
-+ Fully customizable: use CSS animations and transitions you wish (use `.xmasonry` and `.xblock` selectors).
-+ Works with the server rendering.
++ Configurable width of blocks (in columns) and width of columns (targeting width in pixels), maximum number of columns, centering, etc.
++ Fully customizable using CSS. Put animations and transitions you like using `.xmasonry` and `.xblock` selectors.
++ Works with server rendering.
 
 [Demo](https://zitros.github.io/react-xmasonry)
 -----------------------------------------------

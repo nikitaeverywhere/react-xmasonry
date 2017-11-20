@@ -410,7 +410,10 @@ export default class XMasonry extends React.Component {
             updateOnImagesLoad, updateOnFontLoad, className, style, ...otherProps
         } = this.props;
 
-        return <div className={ `xmasonry${ isServer ? " xmasonry-static" : "" }${ className ? " " + className : "" }` }
+        return <div className={
+                        `xmasonry${ isServer ? " xmasonry-static" : "" }${
+                            className ? " " + className : "" }`
+                    }
                     style={ {
                         ...XMasonry.containerStyle,
                         height: isServer ? undefined : actualHeight,
