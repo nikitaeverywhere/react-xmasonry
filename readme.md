@@ -70,7 +70,7 @@ Import `XMasonry` and `XBlock` components:
 import { XMasonry, XBlock } from "react-xmasonry";
 ```
 
-The simplest layout using JSX and a little styling may look like as following:
+The simplest layout using JSX and some styling may look like the following:
 
 ```jsx
 render () {
