@@ -1,4 +1,4 @@
-# [XMasonry](https://npmjs.org/package/react-xmasonry): a Masonry Layout for React JS
+# XMasonry: Masonry Layout for React JS
 
 [![npm](https://img.shields.io/npm/v/react-xmasonry.svg)](https://www.npmjs.com/package/react-xmasonry)
 [![Dependencies](https://img.shields.io/badge/dependencies-none-brightgreen.svg)](http://npm.anvaka.com/#/view/2d/react-xmasonry)
