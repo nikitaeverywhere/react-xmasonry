@@ -67,7 +67,7 @@ Usage
 Import `XMasonry` and `XBlock` components:
 
 ```js
-import { XMasonry, XBlock } from "react-xmasonry";
+import { XMasonry, XBlock } from "react-xmasonry/dist/index";
 ```
 
 The simplest layout using JSX and some styling may look like the following:
