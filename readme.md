@@ -68,7 +68,7 @@ Import `XMasonry` and `XBlock` components:
 
 ```js
 import { XMasonry, XBlock } from "react-xmasonry"; // Imports JSX plain sources
-import { XMasonry, XBlock } from "react-xmasonry/dist/index"; // Imports precompiled bundle
+import { XMasonry, XBlock } from "react-xmasonry/dist/index.js"; // Imports precompiled bundle
 ```
 
 The simplest layout using JSX and some styling may look like the following:
