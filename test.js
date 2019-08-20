@@ -27,7 +27,6 @@ const elementToTest = React.createElement(XMasonry, { maxColumns: 2 },
 test(`Package metadata corresponds to file locations`, async (it) => {
 
     it.is(true, existsSync(pkg.main));
-    it.is(true, existsSync(pkg.module));
 
 });
 
