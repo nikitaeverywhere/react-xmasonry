@@ -5,8 +5,3 @@ export {
     XMasonry,
     XBlock
 };
-
-if (typeof window !== `undefined`) {
-    window.XMasonry = XMasonry;
-    window.XBlock = XBlock;
-}
