@@ -42,7 +42,7 @@ export default class ContentChangesDemo extends React.Component {
                         </div>
                     </div>
                 </XBlock>
-            )}</XMasonry>
+            )}{null}</XMasonry>
         </div>
     }
 

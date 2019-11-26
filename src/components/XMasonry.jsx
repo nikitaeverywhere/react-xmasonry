@@ -177,9 +177,12 @@ export default class XMasonry extends React.Component {
             let newKeys = new Set(),
                 deleted = {};
             React.Children.forEach(newProps.children, (child, i) =>
-                newKeys.add(child.key === null ? i : child.key)
+                child && newKeys.add(child.key === null ? i : child.key)
             );
             React.Children.forEach(this.props.children, (child, i) => {
+                if (!child) {
+                    return;
+                }
                 const key = child.key === null ? i : child.key;
                 if (!newKeys.has(key))
                     deleted[key] = {};
@@ -361,6 +364,9 @@ export default class XMasonry extends React.Component {
         let toMeasure = 0;
         const elements = this.containerWidth === 0 ? [] : (this.props.children || []);
         const children = React.Children.map(elements, (element, i) => {
+            if (!element) {
+                return null;
+            }
             const key = element.key === null ? i : element.key;
             const measured = this.blocks[key]; // || undefined
             if (!measured)
