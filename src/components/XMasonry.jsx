@@ -74,6 +74,9 @@ export default class XMasonry extends React.Component {
         columns: 1,
         containerWidth: 0
     };
+    
+    // Memorize past children to perform updates on children deletion
+    pastChildren = 0;
 
     // These properties are just a sync representation of some state properties.
     columns = this.state.columns;
@@ -138,6 +141,7 @@ export default class XMasonry extends React.Component {
         ) {
             document.fonts.addEventListener("loadingdone", this.update);
         }
+        this.pastChildren = props.children;
     }
 
     /**
@@ -151,10 +155,6 @@ export default class XMasonry extends React.Component {
 
     componentDidMount () {
         this.updateInternal();
-    }
-
-    componentWillMount() {
-        this.updateContainerWidth();
     }
 
     componentWillUnmount () {
@@ -171,12 +171,12 @@ export default class XMasonry extends React.Component {
             clearTimeout(this.smartUpdate);
     }
 
-    componentWillReceiveProps (newProps) {
-        // Other conditions are already covered, except of removing children without adding new ones
-        if (React.Children.count(newProps.children) < React.Children.count(this.props.children)) {
+    componentDidUpdate () {
+        // Other conditions are already covered, except of removing children without adding new ones    
+        if (React.Children.count(this.props.children) < React.Children.count(this.pastChildren)) {
             let newKeys = new Set(),
                 deleted = {};
-            React.Children.forEach(newProps.children, (child, i) =>
+            React.Children.forEach(this.pastChildren, (child, i) =>
                 child && newKeys.add(child.key === null ? i : child.key)
             );
             React.Children.forEach(this.props.children, (child, i) => {
@@ -189,9 +189,7 @@ export default class XMasonry extends React.Component {
             });
             this.recalculatePositions(null, deleted);
         }
-    }
-
-    componentDidUpdate () {
+        this.pastChildren = this.props.children;
         if (!this.updateInternal())
             return;
         if (this.props.smartUpdate)
@@ -298,6 +296,7 @@ export default class XMasonry extends React.Component {
      * @param {object} newBlocks
      * @param {object} deletedBlocks
      * @private
+     * @returns {object|null}
      */
     recalculatePositions (newBlocks = null, deletedBlocks = null) {
 
