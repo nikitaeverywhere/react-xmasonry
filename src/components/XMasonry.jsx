@@ -296,7 +296,6 @@ export default class XMasonry extends React.Component {
      * @param {object} newBlocks
      * @param {object} deletedBlocks
      * @private
-     * @returns {object|null}
      */
     recalculatePositions (newBlocks = null, deletedBlocks = null) {
 
