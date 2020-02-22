@@ -141,6 +141,10 @@ export default class XMasonry extends React.Component {
         ) {
             document.fonts.addEventListener("loadingdone", this.update);
         }
+        if (isServer) {
+            this.state.containerWidth = this.containerWidth = this.props.width || (this.props.targetBlockWidth * 999);
+            this.columns = this.getColumnsNumber(this.state.containerWidth);
+        }
         this.pastChildren = props.children;
     }
 

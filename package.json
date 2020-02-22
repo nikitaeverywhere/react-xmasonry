@@ -1,6 +1,6 @@
 {
   "name": "react-xmasonry",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "Simple & featured native masonry layout implementation for React JS",
   "main": "dist/index.js",
   "scripts": {
