@@ -3,6 +3,7 @@
   "version": "3.0.3",
   "description": "Simple & featured native masonry layout implementation for React JS",
   "main": "dist/index.js",
+  "types": "types.d.ts",
   "scripts": {
     "dev": "webpack --watch",
     "build": "webpack -p",
@@ -37,6 +38,8 @@
     "react": ">= 0.14.0"
   },
   "devDependencies": {
+    "@types/react": "^16.9.56",
+    "@types/react-dom": "^16.9.9",
     "ava": "^0.21.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
