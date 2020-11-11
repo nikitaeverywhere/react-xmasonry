@@ -11,7 +11,6 @@ declare module "react-xmasonry" {
     }
     export interface XBlockProps {
       width?: number;
-      measured?: boolean;
     }
     export const XMasonry: React.ComponentClass<XMasonryProps, {}>;
     export const XBlock: React.ComponentClass<XBlockProps, {}>;
