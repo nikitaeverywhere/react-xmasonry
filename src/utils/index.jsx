@@ -17,4 +17,5 @@ export const debounce = (f, rate = 45) => {
     }
 };
 
-export const isServer = !(typeof document !== "undefined" && typeof window !== "undefined");
+export const isServer = ((process || {}).env || {}).REACT_XMASONRY_SSR_ENABLED !== 'false'
+    && !(typeof document !== "undefined" && typeof window !== "undefined");

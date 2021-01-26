@@ -134,7 +134,7 @@ Warning: do not stick XBlock's content styling to `.xblock` selector. Use `.xmas
 how [XMasonry works](#xmasonry-under-the-hood) to understand why: the `.xblock` class is applied
 only **after** the content measurements are done.
 
-### Server Rendering Note
+### Server-Side Rendering
 
 XMasonry, being rendered on the server ([renderToStaticMarkup](https://facebook.github.io/react/docs/react-dom-server)),
 will be unable to detect content heights due server rendering algorithm limitations. 
@@ -155,6 +155,12 @@ server-rendered result look more consistent with the client's one, for example:
     float: left;
     text-align: left;
 }
+```
+
+You can disable SSR by using the following environment variable passed to your renderer:
+
+```bash
+REACT_XMASONRY_SSR_ENABLED=false
 ```
 
 Configuring Components
