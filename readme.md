@@ -21,11 +21,11 @@ Features
 + Fully customizable using CSS. Put animations and transitions you like using `.xmasonry` and `.xblock` selectors.
 + Works with server rendering.
 
-[Demo](https://zitros.github.io/react-xmasonry)
+[Demo](https://nikitaeverywhere.github.io/react-xmasonry/)
 -----------------------------------------------
 
-Check the XMasonry [demos page](https://zitros.github.io/react-xmasonry). You can also see the
-[notes application](https://zitros.github.io/easy-local-notes/) made with `react-xmasonry`. 
+Check the XMasonry [demos page](https://nikitaeverywhere.github.io/react-xmasonry/). You can also see the
+[notes application](https://nikitaeverywhere.github.io/easy-local-notes/) made with `react-xmasonry`. 
 Play with [this code pen](https://codepen.io/ZitRos/pen/GmrLQB) to see what XMasonry can.
 
 Table of Contents
@@ -93,7 +93,7 @@ render () {
 
 There is no more JavaScript than positioning and sizing! Use any CSS to make animations and 
 transitions you like (`.xmasonry` and `.xblock` selectors). And all the further magic XMasonry will 
-do for you. See the [demos page](https://zitros.github.io/react-xmasonry) sources
+do for you. See the [demos page](https://nikitaeverywhere.github.io/react-xmasonry/) sources
 [here](https://github.com/ZitRos/react-xmasonry/blob/master/docs/jsx/CardsDemo.jsx).
  
 Styling
@@ -237,4 +237,4 @@ do the IR and AR phases again.
 License
 -------
 
-[MIT](license) © [Nikita Savchenko](https://nikita.tk)
+[MIT](license) © [Nikita Savchenko](https://nikitaeverywhere.com)

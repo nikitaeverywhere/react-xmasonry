@@ -9,7 +9,7 @@
     "build": "webpack -p",
     "test": "ava"
   },
-  "author": "ZitRo",
+  "author": "Nikita Savchenko (https://nikitaeverywhere.com)",
   "license": "MIT",
   "keywords": [
     "react",
@@ -33,7 +33,7 @@
     "type": "git",
     "url": "https://github.com/ZitRos/react-xmasonry.git"
   },
-  "homepage": "https://zitros.github.io/react-xmasonry",
+  "homepage": "https://nikitaeverywhere.github.io/react-xmasonry/",
   "peerDependencies": {
     "react": ">= 0.14.0"
   },
